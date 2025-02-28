@@ -31,7 +31,7 @@ class User extends CI_Controller
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
-        $this->load->view('rab/lokasi');
+        $this->load->view('rab/hitungRab');
         $this->load->view('template/footer');
     }
 
@@ -101,8 +101,13 @@ class User extends CI_Controller
             $data['kab_kota'] = 'Belum Klasifikasi';
         }
 
+        $whereBrg = array(
+            'kab_kota' => $kota
+        );
+
         $data['detail_pekerjaan'] = $this->crud->get_where('tbl_pekerjaan_detail', $where)->result_array();
-        $data['detail_barang'] = $this->crud->get_all('mst_barang')->result_array();
+        $data['detail_barang'] = $this->crud->get_where('tbl_harga_material', $whereBrg)->result_array();
+        $data['detail_jasa'] = $this->crud->get_where('tbl_harga_jasa', $whereBrg)->result_array();
 
 
         $this->load->view('template/header', $data);
@@ -595,10 +600,10 @@ class User extends CI_Controller
 
         $where = null;
 
-        $column_order = array('id', 'kode_pekerjaan', 'uraian_pekerjaan', 'kab_kota', 'date_created'); //field yang ada di table 
-        $column_search = array('id', 'kode_pekerjaan', 'uraian_pekerjaan',  'kab_kota', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, kode_pekerjaan, uraian_pekerjaan,  kab_kota, date_created';
-        $group = 'id, kode_pekerjaan, uraian_pekerjaan,  kab_kota, date_created';
+        $column_order = array('id', 'kode_pekerjaan', 'uraian_pekerjaan', 'kab_kota', 'harga_origin', 'date_created'); //field yang ada di table 
+        $column_search = array('id', 'kode_pekerjaan', 'uraian_pekerjaan',  'kab_kota', 'harga_origin', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, kode_pekerjaan, uraian_pekerjaan,  kab_kota, harga_origin, date_created';
+        $group = 'id, kode_pekerjaan, uraian_pekerjaan,  kab_kota, harga_origin, date_created';
         $order = array('id' => 'desc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where, $group);
         $data = array();
@@ -611,6 +616,7 @@ class User extends CI_Controller
             $row['data']['kode_pekerjaan'] = trim($key->kode_pekerjaan);
             $row['data']['uraian_pekerjaan'] = trim($key->uraian_pekerjaan);
             $row['data']['kab_kota'] = trim($key->kab_kota);
+            $row['data']['harga_origin'] =  'Rp. ' . number_format(trim($key->harga_origin), 2);
             $row['data']['date_created'] = date('d-M-Y H:i:s', strtotime($key->date_created));
 
             $data[] = $row;
@@ -673,6 +679,152 @@ class User extends CI_Controller
         //output to json format
         echo json_encode($output);
     }
+
+    public function tambah_pekerjaan_detail()
+    {
+        $table = $this->input->post("table");
+        $kode_barang = $this->input->post("kode_barang");
+        $kab_kota = $this->input->post("kab_kota");
+        $qty = $this->input->post("qty");
+        $kode_pekerjaan = $this->input->post("kode_pekerjaan");
+
+        $wherePkj = array(
+            'kode_pekerjaan' => $kode_pekerjaan
+        );
+        $getPkj = $this->crud->get_where('tbl_pekerjaan_header', $wherePkj)->row_array();
+        $idPkj = $getPkj['id'];
+        $uraian = $getPkj['uraian_pekerjaan'];
+        $whereBrg = array(
+            'kode_barang' => $kode_barang,
+            'kab_kota' => $kab_kota
+        );
+        $getBrg = $this->crud->get_where('tbl_harga_material', $whereBrg)->row_array();
+        $nama_barang = $getBrg['nama_barang'];
+        $harga = $getBrg['harga'];
+
+        $data = array(
+            'id_tbl_pekerjaan_header' => $idPkj,
+            'kode_pekerjaan' => $kode_pekerjaan,
+            'uraian_pekerjaan' => $uraian,
+            'kode_barang' => $kode_barang,
+            'nama_barang' => $nama_barang,
+            'qty' => $qty,
+            'harga_bahan' => $harga,
+            'harga_konversi' => ($harga * $qty)
+        );
+
+        $this->crud->insert($table, $data);
+
+        //update tbl_pekerjaan (harga_origin)
+        $whereOrg = array(
+            'kode_pekerjaan' => $kode_pekerjaan
+        );
+        $a = $this->crud->sum_where('tbl_pekerjaan_detail', $whereOrg, 'harga_konversi')->row_array();
+        $b = $a['harga_konversi'];
+        $dataOrg = array(
+            'harga_origin' => $b
+        );
+        $this->crud->update('tbl_pekerjaan_header', $dataOrg, $whereOrg);
+
+        if ($this->db->affected_rows() == TRUE) {
+            $response = ['status' => 'success', 'message' => 'Berhasil Tambah Data!', 'harga_origin' => $b];
+        } else
+            $response = ['status' => 'error', 'message' => 'Gagal Tambah Data!'];
+
+        echo json_encode($response);
+    }
+
+    public function tambah_pekerjaan_detail_jasa()
+    {
+        $table = $this->input->post("table");
+        $kode_barang = $this->input->post("kode_barang");
+        $kab_kota = $this->input->post("kab_kota");
+        $qty = $this->input->post("qty");
+        $kode_pekerjaan = $this->input->post("kode_pekerjaan");
+
+        $wherePkj = array(
+            'kode_pekerjaan' => $kode_pekerjaan
+        );
+        $getPkj = $this->crud->get_where('tbl_pekerjaan_header', $wherePkj)->row_array();
+        $idPkj = $getPkj['id'];
+        $uraian = $getPkj['uraian_pekerjaan'];
+        $whereBrg = array(
+            'kode_jasa' => $kode_barang,
+            'kab_kota' => $kab_kota
+        );
+        $getBrg = $this->crud->get_where('tbl_harga_jasa', $whereBrg)->row_array();
+        $nama_barang = $getBrg['nama_jasa'];
+        $harga = $getBrg['harga'];
+
+        $data = array(
+            'id_tbl_pekerjaan_header' => $idPkj,
+            'kode_pekerjaan' => $kode_pekerjaan,
+            'uraian_pekerjaan' => $uraian,
+            'kode_barang' => $kode_barang,
+            'nama_barang' => $nama_barang,
+            'qty' => $qty,
+            'harga_bahan' => $harga,
+            'harga_konversi' => ($harga * $qty)
+        );
+
+        $this->crud->insert($table, $data);
+
+        //update tbl_pekerjaan (harga_origin)
+        $whereOrg = array(
+            'kode_pekerjaan' => $kode_pekerjaan
+        );
+        $a = $this->crud->sum_where('tbl_pekerjaan_detail', $whereOrg, 'harga_konversi')->row_array();
+        $b = $a['harga_konversi'];
+        $dataOrg = array(
+            'harga_origin' => $b
+        );
+        $this->crud->update('tbl_pekerjaan_header', $dataOrg, $whereOrg);
+
+        if ($this->db->affected_rows() == TRUE) {
+            $response = ['status' => 'success', 'message' => 'Berhasil Tambah Data!', 'harga_origin' => $b];
+        } else
+            $response = ['status' => 'error', 'message' => 'Gagal Tambah Data!'];
+
+        echo json_encode($response);
+    }
+
+    public function delete_detail()
+    {
+        $table = $this->input->post('table');
+        $kode_pekerjaan = $this->input->post('kode_pekerjaan');
+
+
+        $where = array(
+            'id' => $this->input->post('id')
+        );
+
+        //hapus data
+        $hapus_data = $this->crud->delete($table, $where);
+
+        //update tbl_pekerjaan (harga_origin)
+        $whereOrg = array(
+            'kode_pekerjaan' => $kode_pekerjaan
+        );
+        $a = $this->crud->sum_where('tbl_pekerjaan_detail', $whereOrg, 'harga_konversi')->row_array();
+        $b = $a['harga_konversi'];
+        $dataOrg = array(
+            'harga_origin' => $b
+        );
+        $this->crud->update('tbl_pekerjaan_header', $dataOrg, $whereOrg);
+
+
+
+        if ($hapus_data > 0) {
+            $response = ['status' => 'success', 'message' => 'Data Berhasil Dihapus!', 'harga_origin' => $b];
+        } else
+            $response = ['status' => 'error', 'message' => 'Data Gagal Dihapus!'];
+
+        echo json_encode($response);
+    }
+
+
+
+
 
 
 

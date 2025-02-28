@@ -73,7 +73,7 @@
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li><a href="<?= base_url('user') ?>"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+                    <li><a href="<?= base_url('user') ?>"><i class="fa fa-dashboard"></i> <span>Hitung RAB</span></a></li>
                     <li><a href="<?= base_url('user/lokasi') ?>"><i class="fa fa-map"></i> <span>Master Lokasi</span></a></li>
                     <li><a href="<?= base_url('user/material') ?>"><i class="fa fa-cube"></i> <span>Master Material</span></a></li>
                     <li><a href="<?= base_url('user/jasa') ?>"><i class="fa fa-users"></i> <span>Master Jasa</span></a></li>

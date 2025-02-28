@@ -6,8 +6,8 @@
 
         <div class="callout callout-success">
             <h4 style="text-decoration: underline;">CATATAN</h4>
-            <p>! Input uraian pekerjaan yang jelas beserta satuannya</p>
-            <p>! Setelah input uraian, silahkan isi detail bahan baku atau jasa yang dibutuhkan</p>
+            <p>! -</p>
+            <p>! -</p>
         </div>
 
     </section>
@@ -19,8 +19,11 @@
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title" style="font-weight: bold;font-size: 28px;"><?= $_GET['uraian'] . ' - <small style="background-color: yellow;font-weight:bold;">' . $kab_kota . '</small>' ?></h3>
-                        <h4> <?= $harga_total ?></h4>
-                        <button class="btn bg-navy pull-right" onclick="tambah_pekerjaan()"><i class="fa fa-plus"></i> Tambah Material</button>
+                        <div id="harga_origin">
+                            <h4> <?= $harga_total ?></h4>
+                        </div>
+                        <button class="btn bg-green pull-right" onclick="tambah_jasa()"><i class="fa fa-taxi"></i> Tambah Jasa</button>
+                        <button class="btn bg-blue pull-right" onclick="tambah_pekerjaan()"><i class="fa fa-cloud"></i> Tambah Material</button>
                         <a href="<?= base_url('user/pekerjaan') ?>" class="btn bg-red pull-right"><i class="fa fa-arrow-left"></i> Kembali</a>&nbsp;
                     </div>
 
@@ -58,7 +61,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">TAMBAH MATERIAL/JASA</h4><br>
+                <h4 class="modal-title" style="background-color: blue;color: white;padding: 10px 10px">TAMBAH MATERIAL</h4><br>
             </div>
             <form id="form_tambah_pekerjaan" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
@@ -71,8 +74,55 @@
                             }
 
                             ?>
+                            <input type="hidden" value="<?= $_GET['kota'] ?>" class="form-control" id="kab_kota">
+                            <input type="hidden" value="<?= $_GET['kode_pekerjaan'] ?>" class="form-control" id="kode_pekerjaan">
                         </select>
-                        <input type="text" class="form-control" id="id_material">
+                        <div class="form-group" style="margin-top: 10px;">
+                            <label for="harga">QTY</label>
+                            <input type="text" class="form-control" id="qty">
+                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, ini merupakah jumlah material yang digunakan</label>
+                        </div>
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="submit" id="btn-generate-invoice" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</button>
+                    <button type="button" id="btn-process-invoice" class="btn btn-danger" style="display: none;"><i class="fa fa-spinner fa-spin"></i><span> Processing...</span></button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="modal-tambah-jasa">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="background-color: green;color: white;padding: 10px 10px">TAMBAH JASA</h4><br>
+            </div>
+            <form id="form_tambah_jasa" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="barang">PILIH JASA</label><br>
+                        <select name="pekerjaan-jasa" id="pekerjaan-jasa" style="width: 100%" class="js-example-basic-multiple">
+                            <?php
+                            foreach ($detail_jasa as $key => $val) {
+                                echo '<option value=' . $val["kode_jasa"] . '>' . $val["nama_jasa"] . '</option>';
+                            }
+
+                            ?>
+                            <input type="hidden" value="<?= $_GET['kota'] ?>" class="form-control" id="kab_kota">
+                            <input type="hidden" value="<?= $_GET['kode_pekerjaan'] ?>" class="form-control" id="kode_pekerjaan">
+                        </select>
+                        <div class="form-group" style="margin-top: 10px;">
+                            <label for="harga">QTY</label>
+                            <input type="text" class="form-control" id="qty_jasa">
+                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, ini merupakah jumlah material yang digunakan</label>
+                        </div>
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -92,6 +142,7 @@
     <?php $target = 0; ?>
     $(function() {
         $('#pekerjaan-barang').select2();
+        $('#pekerjaan-jasa').select2();
         $("#tablePekerjaan").DataTable({
             "responsive": true,
             "lengthChange": false,
@@ -142,7 +193,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>`
+                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `','` + data.kode_pekerjaan + `')"><i class="fa fa-trash"></i> Hapus</button>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',
@@ -168,16 +219,8 @@
         $("#btn-process").hide()
     }
 
-    function ubah_data(id, item) {
-
-        $('#modal-ubah-data').modal('show')
-
-        $('#id_pekerjaan').val(id)
-        $('#edit_uraian_pekerjaan').val(item)
-    }
-
-    function delete_data(id) {
-
+    function delete_data(id, kode_pekerjaan) {
+        var nama
         Swal.fire({
             title: 'Apakah Anda Yakin ?',
             text: "Data yang dihapus tidak bisa dikembalikan!",
@@ -189,9 +232,10 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '<?= base_url() ?>user/delete',
+                    url: '<?= base_url() ?>user/delete_detail',
                     data: {
-                        table: 'tbl_pekerjaan_header',
+                        table: 'tbl_pekerjaan_detail',
+                        kode_pekerjaan: kode_pekerjaan,
                         id: id
                     },
                     type: 'post',
@@ -203,6 +247,8 @@
                                 'Data berhasil di hapus.',
                                 'success'
                             )
+                            nama = '<h4 >Rp. ' + result.harga_origin + '</h4>'
+                            $('#harga_origin').html(nama)
                             reload_table()
                         } else
                             toast('error', result.message)
@@ -213,10 +259,18 @@
 
     }
 
-    $("#form_update_pekerjaan").submit(function(e) {
+    function tambah_pekerjaan() {
+        $('#modal-tambah-data').modal('show')
+    }
+
+    function tambah_jasa() {
+        $('#modal-tambah-jasa').modal('show')
+    }
+
+    $("#form_tambah_pekerjaan").submit(function(e) {
         e.preventDefault()
 
-        if ($('#id_pekerjaan').val() == '' || $('#edit_uraian_pekerjaan').val() == '') {
+        if ($('#qty').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',
@@ -226,13 +280,18 @@
         }
 
         // process_submit()
-        var url_ajax = '<?= base_url() ?>user/ubah'
-        var id = $('#id_pekerjaan').val();
-        var uraian_pekerjaan = $('#edit_uraian_pekerjaan').val();
+        var url_ajax = '<?= base_url() ?>user/tambah_pekerjaan_detail'
+
+        var kode_barang = $('#pekerjaan-barang').val();
+        var kab_kota = $('#kab_kota').val();
+        var qty = $('#qty').val();
+        var kode_pekerjaan = $('#kode_pekerjaan').val();
         var form_data = new FormData();
-        form_data.append('table', 'tbl_pekerjaan_header');
-        form_data.append('id', id);
-        form_data.append('uraian_pekerjaan', uraian_pekerjaan);
+        form_data.append('table', 'tbl_pekerjaan_detail');
+        form_data.append('kode_barang', kode_barang);
+        form_data.append('kab_kota', kab_kota);
+        form_data.append('qty', qty);
+        form_data.append('kode_pekerjaan', kode_pekerjaan);
 
         $.ajax({
             url: url_ajax,
@@ -249,9 +308,11 @@
                         title: 'Berhasil',
                         text: result.message,
                     })
-                    $('#modal-ubah-data').modal("hide");
-                    $('#edit_uraian_pekerjaan').val('');
+                    $('#modal-tambah-data').modal("hide");
+                    $('#qty').val('');
                     // close_edit()
+                    nama = '<h4 >Rp. ' + result.harga_origin + '</h4>'
+                    $('#harga_origin').html(nama)
                     reload_table()
                     // default_submit()
                 } else {
@@ -276,14 +337,10 @@
         });
     })
 
-    function tambah_pekerjaan() {
-        $('#modal-tambah-data').modal('show')
-    }
-
-    $("#form_tambah_pekerjaan").submit(function(e) {
+    $("#form_tambah_jasa").submit(function(e) {
         e.preventDefault()
 
-        if ($('#uraian_pekerjaan').val() == '') {
+        if ($('#qty_jasa').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',
@@ -293,12 +350,18 @@
         }
 
         // process_submit()
-        var url_ajax = '<?= base_url() ?>user/tambah_pekerjaan'
+        var url_ajax = '<?= base_url() ?>user/tambah_pekerjaan_detail_jasa'
 
-        var item = $('#uraian_pekerjaan').val();
+        var kode_barang = $('#pekerjaan-jasa').val();
+        var kab_kota = $('#kab_kota').val();
+        var qty = $('#qty_jasa').val();
+        var kode_pekerjaan = $('#kode_pekerjaan').val();
         var form_data = new FormData();
-        form_data.append('table', 'tbl_pekerjaan_header');
-        form_data.append('uraian_pekerjaan', item);
+        form_data.append('table', 'tbl_pekerjaan_detail');
+        form_data.append('kode_barang', kode_barang);
+        form_data.append('kab_kota', kab_kota);
+        form_data.append('qty', qty);
+        form_data.append('kode_pekerjaan', kode_pekerjaan);
 
         $.ajax({
             url: url_ajax,
@@ -315,9 +378,11 @@
                         title: 'Berhasil',
                         text: result.message,
                     })
-                    $('#modal-tambah-data').modal("hide");
-                    $('#uraian_pekerjaan').val('');
+                    $('#modal-tambah-jasa').modal("hide");
+                    $('#qty_jasa').val('');
                     // close_edit()
+                    nama = '<h4 >Rp. ' + result.harga_origin + '</h4>'
+                    $('#harga_origin').html(nama)
                     reload_table()
                     // default_submit()
                 } else {
