@@ -1,14 +1,7 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <a href="<?= base_url('user/status') ?>" type="button" class="btn bg-navy btn-lg"><i class="fa fa-book"></i> Apa itu status ?</a>
-        <a href="<?= base_url('user/reject') ?>" type="button" class="btn bg-orange btn-lg"><i class="fa fa-clipboard"></i> Histori barang tidak bisa scrap</a>
-        <button type="button" class="btn bg-red btn-lg" onclick="changepsw('<?= $this->session->userdata('id') ?>')"><i class="fa fa-key"></i> Ganti Password</button>
 
-        <!-- <button type="button" class="btn bg-orange btn-lg"><i class="fa fa-map-signs"></i> Posisi scrap saya dimana ?</button> -->
-
-    </section>
     <section class="content-header">
 
         <div class="callout callout-success">
@@ -35,10 +28,10 @@
                             <thead>
                                 <tr>
                                     <th style="width: 5%">NO</th>
-                                    <th style="width: 60%">Kode Barang</th>
+                                    <th style="width: 30%">Kode Barang</th>
                                     <th>Nama Barang</th>
                                     <th>Register Date</th>
-                                    <th>AKSI</th>
+                                    <th style="width: 20%">AKSI</th>
                                 </tr>
                             </thead>
                         </table>

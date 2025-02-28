@@ -67,16 +67,16 @@ INSERT INTO `tbl_harga_material` (`id`, `id_mst_barang`, `kode_barang`, `nama_ba
 
 -- Dumping data for table db_rab.tbl_pekerjaan_detail: ~3 rows (approximately)
 DELETE FROM `tbl_pekerjaan_detail`;
-INSERT INTO `tbl_pekerjaan_detail` (`id`, `id_tbl_pekerjaan_header`, `kode_pekerjaan`, `uraian_pekerjaan`, `kode_barang`, `nama_barang`, `qty`, `harga_bahan`, `harga_dasar`, `margin_persen`, `margin_amount`, `harga_final`, `date_created`) VALUES
-	(1, 1, 'ITEM-1001', 'Tembok Kasar 1 M3', 'RM-1001', 'PASIR PASANG 1 M3', 0.175000, 170000.000000, 29750.000000, 0.200000, 5950.000000, 35700.000000, '2025-02-26 05:58:46'),
-	(2, 1, 'ITEM-1001', 'Tembok Kasar 1 M3', 'RM-1002', 'SEMEN MERDEKA 40KG', 1.000000, 45000.000000, 45000.000000, 0.200000, 9000.000000, 54000.000000, '2025-02-26 05:59:01'),
-	(3, 1, 'ITEM-1001', 'Tembok Kasar 1 M3', 'RM-1003', 'BATA MERAH 1 PCS', 75.000000, 700.000000, 52500.000000, 0.200000, 10500.000000, 63000.000000, '2025-02-26 05:59:18');
+INSERT INTO `tbl_pekerjaan_detail` (`id`, `id_tbl_pekerjaan_header`, `kode_pekerjaan`, `uraian_pekerjaan`, `kode_barang`, `nama_barang`, `qty`, `harga_bahan`, `harga_konversi`, `date_created`) VALUES
+	(4, 1, 'ITEM-1001', 'Tembok Kasar 1 M3', 'RM-1001', 'PASIR PASANG 1 M3', 0.175000, 175000.000000, 30625.000000, '2025-02-28 01:34:06'),
+	(5, 1, 'ITEM-1001', 'Tembok Kasar 1 M3', 'RM-1002', 'SEMEN MERDEKA 40KG', 1.000000, 45000.000000, 45000.000000, '2025-02-28 01:34:09'),
+	(6, 1, 'ITEM-1001', 'Tembok Kasar 1 M3', 'RM-1003', 'BATA MERAH 1 PCS', 75.000000, 700.000000, 52500.000000, '2025-02-28 01:34:10');
 
 -- Dumping data for table db_rab.tbl_pekerjaan_header: ~1 rows (approximately)
 DELETE FROM `tbl_pekerjaan_header`;
-INSERT INTO `tbl_pekerjaan_header` (`id`, `kode_pekerjaan`, `uraian_pekerjaan`, `harga_dasar`, `kab_kota`, `date_created`) VALUES
-	(1, 'ITEM-1001', 'Tembok Kasar 1 M3', 100000.000000, 'KAB MALANG', '2025-02-26 08:11:18'),
-	(13, 'ITEM-1002', 'Acian Dinding 1 M3', 0.000000, 'KOTA MALANG', '2025-02-26 08:26:44');
+INSERT INTO `tbl_pekerjaan_header` (`id`, `kode_pekerjaan`, `uraian_pekerjaan`, `kab_kota`, `date_created`) VALUES
+	(1, 'ITEM-1001', 'Tembok Kasar 1 M3', 'KAB MALANG', '2025-02-28 01:00:10'),
+	(16, 'ITEM-1002', 'Acian Finishing', 'KOTA MALANG', '2025-02-28 01:44:43');
 
 -- Dumping data for table db_rab.tbl_rab_detail: ~0 rows (approximately)
 DELETE FROM `tbl_rab_detail`;

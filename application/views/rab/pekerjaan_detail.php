@@ -1,14 +1,7 @@
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <a href="<?= base_url('user/status') ?>" type="button" class="btn bg-navy btn-lg"><i class="fa fa-book"></i> Apa itu status ?</a>
-        <a href="<?= base_url('user/reject') ?>" type="button" class="btn bg-orange btn-lg"><i class="fa fa-clipboard"></i> Histori barang tidak bisa scrap</a>
-        <button type="button" class="btn bg-red btn-lg" onclick="changepsw('<?= $this->session->userdata('id') ?>')"><i class="fa fa-key"></i> Ganti Password</button>
 
-        <!-- <button type="button" class="btn bg-orange btn-lg"><i class="fa fa-map-signs"></i> Posisi scrap saya dimana ?</button> -->
-
-    </section>
     <section class="content-header">
 
         <div class="callout callout-success">
@@ -25,8 +18,9 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title" style="font-weight: bold;font-size: 28px;"><?= $_GET['uraian'] ?></h3>
-                        <button class="btn bg-navy pull-right" onclick="tambah_pekerjaan()"><i class="fa fa-plus"></i> Tambah Material- JASA</button>
+                        <h3 class="box-title" style="font-weight: bold;font-size: 28px;"><?= $_GET['uraian'] . ' - <small style="background-color: yellow;font-weight:bold;">' . $kab_kota . '</small>' ?></h3>
+                        <h4> <?= $harga_total ?></h4>
+                        <button class="btn bg-navy pull-right" onclick="tambah_pekerjaan()"><i class="fa fa-plus"></i> Tambah Material</button>
                         <a href="<?= base_url('user/pekerjaan') ?>" class="btn bg-red pull-right"><i class="fa fa-arrow-left"></i> Kembali</a>&nbsp;
                     </div>
 
@@ -36,14 +30,12 @@
                             <thead>
                                 <tr>
                                     <th style="width: 5%">NO</th>
-                                    <th style="width: 10%">Kode Pekerjaan</th>
-                                    <th style="width: 25%">Uraian</th>
-                                    <th>Harga Dasar</th>
-                                    <th>Margin (%)</th>
-                                    <th>Amount Margin</th>
-                                    <th>Harga Final</th>
+                                    <th style="width: 30%">Material</th>
+                                    <th style="width: 5%">QTY</th>
+                                    <th>Harga Bahan</th>
+                                    <th>Harga Konversi<br>(QTY x Harga Bahan)</th>
                                     <th>Register Date</th>
-                                    <th style="width: 20%">AKSI</th>
+                                    <th style="width: 10%">AKSI</th>
                                 </tr>
                             </thead>
                         </table>
@@ -60,35 +52,6 @@
 </div>
 <!-- /.content-wrapper -->
 
-
-<div class="modal fade" id="modal-ubah-data">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Ubah Pekerjaan</h4><br>
-            </div>
-            <form id="form_update_pekerjaan" method="post" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="uraian_pekerjaan">Nama Pekerjaan</label>
-                        <input type="hidden" class="form-control" id="id_pekerjaan">
-                        <input type="text" class="form-control" id="edit_uraian_pekerjaan">
-                    </div>
-                </div>
-                <div class=" modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" id="btn-generate-invoice" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</button>
-                    <button type="button" id="btn-process-invoice" class="btn btn-danger" style="display: none;"><i class="fa fa-spinner fa-spin"></i><span> Processing...</span></button>
-                </div>
-            </form>
-        </div>
-
-    </div>
-
-</div>
-
 <div class="modal fade" id="modal-tambah-data">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -100,8 +63,8 @@
             <form id="form_tambah_pekerjaan" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="barang">PILIH MATERIAL</label>
-                        <select name="pekerjaan-barang" id="pekerjaan-barang" style="width: 50%" multiple="multiple" class="js-example-basic-multiple">
+                        <label for="barang">PILIH MATERIAL</label><br>
+                        <select name="pekerjaan-barang" id="pekerjaan-barang" style="width: 100%" class="js-example-basic-multiple">
                             <?php
                             foreach ($detail_barang as $key => $val) {
                                 echo '<option value=' . $val["kode_barang"] . '>' . $val["nama_barang"] . '</option>';
@@ -109,7 +72,7 @@
 
                             ?>
                         </select>
-                        <label style="font-weight: normal; color: blue;">Isi detail pekerjaan yang jelas beserta satuannya, misal : Plester Dinding 1 M3</label>
+                        <input type="text" class="form-control" id="id_material">
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -141,8 +104,11 @@
 
             'ajax': {
                 'dataType': 'json',
-                'url': '<?= base_url('user/ajax_table_pekerjaan') ?>',
+                'url': '<?= base_url('user/ajax_table_pekerjaan_detail') ?>',
                 'type': 'post',
+                'data': {
+                    'kode_pekerjaan': '<?= $_GET["kode_pekerjaan"] ?>'
+                },
             },
             'columns': [{
                 "target": [<?= $target ?>],
@@ -151,27 +117,22 @@
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-left py-1',
-                "data": "data.kode_pekerjaan",
+                "data": "data",
+                "render": function(data) {
+                    return data.nama_barang + `<br><h5 style="padding-top:0px;margin-top:0px;font-weight:bold;">` + data.kode_barang + `</h5>`
+                }
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
-                "data": "data.uraian_pekerjaan",
+                "data": "data.qty",
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
-                "data": "data.harga_dasar",
+                "data": "data.harga_bahan",
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
-                "data": "data.margin_persen",
-            }, {
-                "target": [<?= $target++ ?>],
-                "className": 'text-right py-1',
-                "data": "data.margin_amount",
-            }, {
-                "target": [<?= $target++ ?>],
-                "className": 'text-right py-1',
-                "data": "data.harga_final",
+                "data": "data.harga_konversi",
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-center py-1',
@@ -181,7 +142,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `','` + data.uraian_pekerjaan + `')"><i class="fa fa-edit"></i> Ubah</button>&nbsp;<a href="<?= base_url('user/pekerjaan_detail?kode_pekerjaan=') ?>${data.kode_pekerjaan}&id=${data.id}" target="_blank" type="button" class="btn btn-info btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
+                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',

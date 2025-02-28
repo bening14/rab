@@ -35,12 +35,10 @@
                             <thead>
                                 <tr>
                                     <th style="width: 5%">NO</th>
-                                    <th style="width: 10%">Kode Pekerjaan</th>
-                                    <th style="width: 25%">Uraian</th>
-                                    <th>Harga Dasar</th>
+                                    <th style="width: 50%">Pekerjaan</th>
                                     <th>Area/Wilayah</th>
                                     <th>Register Date</th>
-                                    <th style="width: 20%">AKSI</th>
+                                    <th style="width: 15%">AKSI</th>
                                 </tr>
                             </thead>
                         </table>
@@ -56,35 +54,6 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-
-
-<div class="modal fade" id="modal-ubah-data">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Ubah Pekerjaan</h4><br>
-            </div>
-            <form id="form_update_pekerjaan" method="post" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="uraian_pekerjaan">Nama Pekerjaan</label>
-                        <input type="hidden" class="form-control" id="id_pekerjaan">
-                        <input type="text" class="form-control" id="edit_uraian_pekerjaan">
-                    </div>
-                </div>
-                <div class=" modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" id="btn-generate-invoice" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</button>
-                    <button type="button" id="btn-process-invoice" class="btn btn-danger" style="display: none;"><i class="fa fa-spinner fa-spin"></i><span> Processing...</span></button>
-                </div>
-            </form>
-        </div>
-
-    </div>
-
-</div>
 
 <div class="modal fade" id="modal-tambah-data">
     <div class="modal-dialog">
@@ -151,15 +120,10 @@
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-left py-1',
-                "data": "data.kode_pekerjaan",
-            }, {
-                "target": [<?= $target++ ?>],
-                "className": 'text-right py-1',
-                "data": "data.uraian_pekerjaan",
-            }, {
-                "target": [<?= $target++ ?>],
-                "className": 'text-right py-1',
-                "data": "data.harga_dasar",
+                "data": "data",
+                "render": function(data) {
+                    return data.uraian_pekerjaan + `<br><h5 style="padding-top:0px;margin-top:0px;font-weight:bold;">` + data.kode_pekerjaan + `</h5>`
+                }
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
@@ -173,7 +137,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `','` + data.uraian_pekerjaan + `')"><i class="fa fa-edit"></i> Ubah</button>&nbsp;<a href="<?= base_url('user/pekerjaan_detail?kode_pekerjaan=') ?>${data.kode_pekerjaan}&uraian=${data.uraian_pekerjaan}&id=${data.id}" type="button" class="btn btn-info btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
+                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<a href="<?= base_url('user/pekerjaan_detail?kode_pekerjaan=') ?>${data.kode_pekerjaan}&kota=${data.kab_kota}&uraian=${data.uraian_pekerjaan}" type="button" class="btn btn-info btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',
@@ -197,14 +161,6 @@
     function default_submit() {
         $("#btn-submit").show()
         $("#btn-process").hide()
-    }
-
-    function ubah_data(id, item) {
-
-        $('#modal-ubah-data').modal('show')
-
-        $('#id_pekerjaan').val(id)
-        $('#edit_uraian_pekerjaan').val(item)
     }
 
     function delete_data(id) {
@@ -243,69 +199,6 @@
         })
 
     }
-
-    $("#form_update_pekerjaan").submit(function(e) {
-        e.preventDefault()
-
-        if ($('#id_pekerjaan').val() == '' || $('#edit_uraian_pekerjaan').val() == '') {
-            Swal.fire(
-                'error!',
-                'tidak boleh ada kolom kosong!',
-                'error'
-            )
-            return
-        }
-
-        // process_submit()
-        var url_ajax = '<?= base_url() ?>user/ubah'
-        var id = $('#id_pekerjaan').val();
-        var uraian_pekerjaan = $('#edit_uraian_pekerjaan').val();
-        var form_data = new FormData();
-        form_data.append('table', 'tbl_pekerjaan_header');
-        form_data.append('id', id);
-        form_data.append('uraian_pekerjaan', uraian_pekerjaan);
-
-        $.ajax({
-            url: url_ajax,
-            dataType: "json",
-            cache: false,
-            contentType: false,
-            processData: false,
-            data: form_data,
-            type: 'post',
-            success: function(result) {
-                if (result.status == "success") {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: result.message,
-                    })
-                    $('#modal-ubah-data').modal("hide");
-                    $('#edit_uraian_pekerjaan').val('');
-                    // close_edit()
-                    reload_table()
-                    // default_submit()
-                } else {
-                    // default_submit()
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: result.message
-                    })
-                    // toast_confirm('error', result.message)
-                }
-            },
-            error: function(err) {
-                default_submit()
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: err.responseText
-                })
-                // toast_confirm('error', err.responseText)
-            }
-        });
-    })
 
     function tambah_pekerjaan() {
         $('#modal-tambah-data').modal('show')
