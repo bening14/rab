@@ -69,6 +69,14 @@
                         <input type="hidden" class="form-control" id="id_rab">
                     </div>
                     <div class="form-group">
+                        <label for="edit_kegiatan_pekerjaan">Uraian Kegiatan / Kegiatan Pekerjaan</label>
+                        <input type="text" class="form-control" id="edit_kegiatan_pekerjaan">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_luas_area">Luas Area</label>
+                        <input type="text" class="form-control" id="edit_luas_area">
+                    </div>
+                    <div class="form-group">
                         <label for="edit_customer">Customer</label>
                         <input type="text" class="form-control" id="edit_customer" onkeyup="this.value = this.value.toUpperCase()">
                     </div>
@@ -106,6 +114,14 @@
                     <div class="form-group">
                         <label for="so_number">SO Number</label>
                         <input type="text" class="form-control" id="so_number" onkeyup="this.value = this.value.toUpperCase()">
+                    </div>
+                    <div class="form-group">
+                        <label for="kegiatan_pekerjaan">Uraian Pekerjaan / Kegiatan Pekerjaan</label>
+                        <input type="text" class="form-control" id="kegiatan_pekerjaan">
+                    </div>
+                    <div class="form-group">
+                        <label for="luas_area">Luas Area</label>
+                        <input type="text" class="form-control" id="luas_area">
                     </div>
                     <div class="form-group">
                         <label for="customer">Customer</label>
@@ -201,7 +217,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-default" onclick="cetak('` + data.id + `')"><i class="fa fa-print"></i> Cetak</button>&nbsp;<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `')"><i class="fa fa-edit"></i> Ubah</button>&nbsp;<a href="<?= base_url('user/rab_detail?so_number=') ?>${data.so_number}&customer=${data.customer}&kota=${data.kab_kota}&alamat=${data.alamat}&hp=${data.hp}" type="button" class="btn btn-primary btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
+                    return `<a href="<?= base_url('user/print_rab?so_number=') ?>${data.so_number}" target="_blank" type="button" class="btn btn-default btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Cetak"><i class="fa fa-print"></i> Cetak</a>&nbsp;<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<a href="<?= base_url('user/rab_detail?so_number=') ?>${data.so_number}&customer=${data.customer}&kota=${data.kab_kota}&alamat=${data.alamat}&hp=${data.hp}" type="button" class="btn btn-primary btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',
@@ -350,7 +366,7 @@
     $("#form_tambah_rab").submit(function(e) {
         e.preventDefault()
 
-        if ($('#so_number').val() == '' || $('#customer').val() == '' || $('#alamat').val() == '' || $('#hp').val() == '' || $('#kab_kota').val() == '') {
+        if ($('#so_number').val() == '' || $('#kegiatan_pekerjaan').val() == ''|| $('#luas_area').val() == ''|| $('#customer').val() == '' || $('#alamat').val() == '' || $('#hp').val() == '' || $('#kab_kota').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',
@@ -363,6 +379,8 @@
         var url_ajax = '<?= base_url() ?>user/tambah_hitung_rab'
 
         var so_number = $('#so_number').val();
+        var kegiatan_pekerjaan = $('#kegiatan_pekerjaan').val();
+        var luas_area = $('#luas_area').val();
         var customer = $('#customer').val();
         var alamat = $('#alamat').val();
         var hp = $('#hp').val();
@@ -373,6 +391,8 @@
         form_data.append('customer', customer);
         form_data.append('alamat', alamat);
         form_data.append('hp', hp);
+        form_data.append('kegiatan_pekerjaan', kegiatan_pekerjaan);
+        form_data.append('luas_area', luas_area);
         form_data.append('id_mst_lokasi', id_mst_lokasi);
 
         $.ajax({

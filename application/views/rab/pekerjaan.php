@@ -28,7 +28,8 @@
                             <thead>
                                 <tr>
                                     <th style="width: 5%">NO</th>
-                                    <th style="width: 50%">Pekerjaan</th>
+                                    <th style="width: 40%">Pekerjaan</th>
+                                    <th>Satuan</th>
                                     <th>Area/Wilayah</th>
                                     <th>Harga Origin</th>
                                     <th>Register Date</th>
@@ -62,7 +63,19 @@
                     <div class="form-group">
                         <label for="uraian_pekerjaan">URAIAN PEKERJAAN</label>
                         <input type="text" class="form-control" id="uraian_pekerjaan">
-                        <label style="font-weight: normal; color: blue;">Isi detail pekerjaan yang jelas beserta satuannya, misal : Plester Dinding 1 M3</label>
+                        <!-- <label style="font-weight: normal; color: blue;">Isi detail pekerjaan yang jelas beserta satuannya, misal : Plester Dinding 1 M3</label> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="satuan">SATUAN</label>
+                        <select name="satuan" id="satuan" class="form-control">
+                            <?php
+                            foreach ($satuan as $key => $val) {
+                                ?>
+                                <option value="<?= $val['satuan'] ?>"><?= $val['satuan'] ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="kab_kota">AREA/WILAYAH</label>
@@ -121,8 +134,12 @@
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
-                "data": "data.kab_kota",
+                "data": "data.satuan",
             }, {
+                "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
+                "data": "data.kab_kota",
+            },{
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
                 "data": "data.harga_origin",
@@ -218,11 +235,13 @@
         var url_ajax = '<?= base_url() ?>user/tambah_pekerjaan'
 
         var kab_kota = $('#kab_kota').val();
+        var satuan = $('#satuan').val();
         var item = $('#uraian_pekerjaan').val();
         var form_data = new FormData();
         form_data.append('table', 'tbl_pekerjaan_header');
         form_data.append('kab_kota', kab_kota);
         form_data.append('uraian_pekerjaan', item);
+        form_data.append('satuan', satuan);
 
         $.ajax({
             url: url_ajax,

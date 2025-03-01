@@ -17,6 +17,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
+                    <div style="text-align: center;color: white;background-color: orange;"><h2>-- FORM MEMBUAT RAB --</h2></div>
                     <div class="box-header">
                         <h3 class="box-title" style="font-weight: bold;font-size: 28px;"><?= $_GET['so_number'] . ' - <small style="background-color: yellow;font-weight:bold;">' . $kota . '</small>' ?></h3>
                         <h3><?= $customer ?></h3>
@@ -70,7 +71,7 @@
             </div>
             <form id="form_tambah_pekerjaan" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
-                    <div class="form-group">
+                        <div class="form-group">
                         <label for="barang">PILIH PEKERJAAN</label><br>
                         <select name="pekerjaan-barang" id="pekerjaan-barang" style="width: 100%" class="js-example-basic-multiple">
                             <?php
@@ -82,6 +83,7 @@
                             <input type="hidden" value="<?= $_GET['kota'] ?>" class="form-control" id="kab_kota">
                             <input type="hidden" value="<?= $_GET['so_number'] ?>" class="form-control" id="so_number">
                         </select>
+                        </div>
                         <div class="form-group" style="margin-top: 10px;">
                             <label for="harga">QTY</label>
                             <input type="text" class="form-control" id="qty">
@@ -97,7 +99,7 @@
                             <input type="text" class="form-control" id="resiko_persen">
                             <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, tidak semua pekerjaan harus memiliki cost faktor resiko</label>
                         </div>
-                    </div>
+                    
                 </div>
                 <div class=" modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

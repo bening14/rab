@@ -72,13 +72,17 @@
                 <!-- /.search form -->
                 <!-- sidebar menu: : style can be found in sidebar.less -->
                 <ul class="sidebar-menu" data-widget="tree">
-                    <li class="header">MAIN NAVIGATION</li>
-                    <li><a href="<?= base_url('user') ?>"><i class="fa fa-dashboard"></i> <span>Hitung RAB</span></a></li>
+                    <li class="header">RAB</li>
+                    <li><a href="<?= base_url('user') ?>"><i class="fa fa-calculator"></i> <span>Hitung RAB</span></a></li>
+                    <li class="header">MASTER</li>
                     <li><a href="<?= base_url('user/lokasi') ?>"><i class="fa fa-map"></i> <span>Master Lokasi</span></a></li>
+                    <li><a href="<?= base_url('user/satuan') ?>"><i class="fa fa-map-signs"></i> <span>Master Satuan</span></a></li>
                     <li><a href="<?= base_url('user/material') ?>"><i class="fa fa-cube"></i> <span>Master Material</span></a></li>
                     <li><a href="<?= base_url('user/jasa') ?>"><i class="fa fa-users"></i> <span>Master Jasa</span></a></li>
+                    <li class="header">PRICING</li>
                     <li><a href="<?= base_url('user/harga_material') ?>"><i class="fa fa-money"></i> <span>Harga Material</span></a></li>
                     <li><a href="<?= base_url('user/harga_jasa') ?>"><i class="fa fa-money"></i> <span>Harga Jasa</span></a></li>
+                    <li class="header">PEKERJAAN</li>
                     <li><a href="<?= base_url('user/pekerjaan') ?>"><i class="fa fa-briefcase"></i> <span>Master Pekerjaan</span></a></li>
 
                 </ul>

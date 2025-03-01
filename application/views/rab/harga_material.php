@@ -29,6 +29,7 @@
                                 <tr>
                                     <th style="width: 5%">NO</th>
                                     <th style="width: 40%">Nama Barang</th>
+                                    <th>Satuan</th>
                                     <th>Area/Wilayah</th>
                                     <th>Harga</th>
                                     <th>Register Date</th>
@@ -60,6 +61,10 @@
             </div>
             <form id="form_update_harga" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit_nama_barang">Nama Barang/Material</label>
+                        <input type="text" class="form-control" id="edit_nama_barang" readonly>
+                    </div>
                     <div class="form-group">
                         <label for="harga">Harga</label>
                         <input type="hidden" class="form-control" id="id_harga">
@@ -94,12 +99,13 @@
             <form id="form_tambah_harga" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="id_mst_barang">NAMA BARANG/MATERIAL</label>
-                        <select name="id_mst_barang" id="id_mst_barang" class="form-control">
+                        <label for="barang">PILIH MATERIAL</label><br>
+                        <select name="id_mst_barang" id="id_mst_barang" style="width: 100%" class="js-example-basic-multiple">
                             <?php
                             foreach ($barang as $key1 => $value1) {
-                                echo '<option value=' . $value1['id'] . '>' . $value1['nama_barang'] . '</option>';
+                                echo '<option value=' . $value1['id'] . '>' . $value1['nama_barang'] . ' - ' . $value1['satuan'] . '</option>';
                             }
+
                             ?>
                         </select>
                     </div>
@@ -135,6 +141,7 @@
 <script>
     <?php $target = 0; ?>
     $(function() {
+        $('#id_mst_barang').select2();
         $("#tableHarga").DataTable({
             "responsive": true,
             "lengthChange": false,
@@ -165,6 +172,10 @@
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
+                "data": "data.satuan",
+            },{
+                "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
                 "data": "data.kab_kota",
             }, {
                 "target": [<?= $target++ ?>],
@@ -179,7 +190,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `','` + data.kab_kota + `','` + data.harga + `')"><i class="fa fa-edit"></i> Ubah</button>`
+                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `','` + data.kab_kota + `','` + data.nama_barang + `','` + data.harga + `')"><i class="fa fa-edit"></i> Ubah</button>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',
@@ -205,12 +216,13 @@
         $("#btn-process").hide()
     }
 
-    function ubah_data(id, item, harga) {
+    function ubah_data(id, item, nama_barang, harga) {
 
         $('#modal-ubah-data').modal('show')
 
         $('#id_harga').val(id)
         $('#edit_harga').val(harga)
+        $('#edit_nama_barang').val(nama_barang)
         $('#edit_kab_kota').val(item)
     }
 

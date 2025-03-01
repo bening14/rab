@@ -28,8 +28,8 @@
                             <thead>
                                 <tr>
                                     <th style="width: 5%">NO</th>
-                                    <th style="width: 30%">Kode jasa</th>
-                                    <th>Nama jasa</th>
+                                    <th style="width: 30%">Nama jasa</th>
+                                    <th>Satuan</th>
                                     <th>Register Date</th>
                                     <th style="width: 20%">AKSI</th>
                                 </tr>
@@ -64,6 +64,18 @@
                         <input type="hidden" class="form-control" id="id_jasa">
                         <input type="text" class="form-control" id="edit_nama_jasa" onkeyup="this.value = this.value.toUpperCase()">
                     </div>
+                    <div class="form-group">
+                        <label for="satuan">SATUAN</label>
+                        <select name="edit_satuan" id="edit_satuan" class="form-control">
+                            <?php
+                            foreach ($satuan as $key => $val) {
+                                ?>
+                                <option value="<?= $val['satuan'] ?>"><?= $val['satuan'] ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
                 </div>
                 <div class=" modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -90,6 +102,18 @@
                     <div class="form-group">
                         <label for="nama_jasa">NAMA JASA</label>
                         <input type="text" class="form-control" id="nama_jasa" onkeyup="this.value = this.value.toUpperCase()">
+                    </div>
+                    <div class="form-group">
+                        <label for="satuan">SATUAN</label>
+                        <select name="satuan" id="satuan" class="form-control">
+                            <?php
+                            foreach ($satuan as $key => $val) {
+                                ?>
+                                <option value="<?= $val['satuan'] ?>"><?= $val['satuan'] ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -127,14 +151,17 @@
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
                 "data": "data.no",
-            }, {
+            },{
                 "target": [<?= $target++ ?>],
                 "className": 'text-left py-1',
-                "data": "data.kode_jasa",
-            }, {
+                "data": "data",
+               "render": function(data) {
+                    return data.nama_jasa + `<br><h5 style="padding-top:0px;margin-top:0px;font-weight:bold;">` + data.kode_jasa + `</h5>`
+                }
+            },{
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
-                "data": "data.nama_jasa",
+                "data": "data.satuan",
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-center py-1',
@@ -231,10 +258,12 @@
         var url_ajax = '<?= base_url() ?>user/ubah'
         var id = $('#id_jasa').val();
         var nama_jasa = $('#edit_nama_jasa').val();
+        var edit_satuan = $('#edit_satuan').val();
         var form_data = new FormData();
         form_data.append('table', 'mst_jasa');
         form_data.append('id', id);
         form_data.append('nama_jasa', nama_jasa);
+        form_data.append('satuan', edit_satuan);
 
         $.ajax({
             url: url_ajax,
@@ -298,9 +327,11 @@
         var url_ajax = '<?= base_url() ?>user/tambah_jasa'
 
         var item = $('#nama_jasa').val();
+        var satuan = $('#satuan').val();
         var form_data = new FormData();
         form_data.append('table', 'mst_jasa');
         form_data.append('nama_jasa', item);
+        form_data.append('satuan', satuan);
 
         $.ajax({
             url: url_ajax,

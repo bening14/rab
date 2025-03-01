@@ -70,7 +70,7 @@
                         <select name="pekerjaan-barang" id="pekerjaan-barang" style="width: 100%" class="js-example-basic-multiple">
                             <?php
                             foreach ($detail_barang as $key => $val) {
-                                echo '<option value=' . $val["kode_barang"] . '>' . $val["nama_barang"] . '</option>';
+                                echo '<option value=' . $val["kode_barang"] . '>' . $val["nama_barang"] . ' - ' . $val["satuan"] . '</option>';
                             }
 
                             ?>
@@ -111,7 +111,7 @@
                         <select name="pekerjaan-jasa" id="pekerjaan-jasa" style="width: 100%" class="js-example-basic-multiple">
                             <?php
                             foreach ($detail_jasa as $key => $val) {
-                                echo '<option value=' . $val["kode_jasa"] . '>' . $val["nama_jasa"] . '</option>';
+                                echo '<option value=' . $val["kode_jasa"] . '>' . $val["nama_jasa"] . ' - ' . $val["satuan"] . '</option>';
                             }
 
                             ?>

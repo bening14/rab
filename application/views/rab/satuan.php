@@ -6,8 +6,8 @@
 
         <div class="callout callout-success">
             <h4 style="text-decoration: underline;">CATATAN</h4>
-            <p>! Input hanya MATERIAL SAJA</p>
-            <p>! Data JASA di Inputkan di Harga JASA/TUKANG</p>
+            <p>! -</p>
+            <p>! -</p>
         </div>
 
     </section>
@@ -18,20 +18,19 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title"><strong>MASTER MATERIAL</strong></h3>
-                        <button class="btn bg-navy pull-right" onclick="tambah_barang()"><i class="fa fa-plus"></i> Tambah Barang</button>
+                        <h3 class="box-title"><strong>MASTER SATUAN</strong></h3>
+                        <button class="btn bg-navy pull-right" onclick="tambah_satuan()"><i class="fa fa-plus"></i> Tambah Satuan</button>
                     </div>
 
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="tableBarang" class="table table-bordered table-hover">
+                        <table id="tableSatuan" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th style="width: 5%">NO</th>
-                                    <th style="width: 20%">Nama Barang</th>
-                                    <th style="width: 5%">Satuan</th>
+                                    <th style="width: 70%">Satuan</th>
                                     <th>Register Date</th>
-                                    <th style="width: 20%">AKSI</th>
+                                    <th style="width: 10%">AKSI</th>
                                 </tr>
                             </thead>
                         </table>
@@ -55,27 +54,14 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Ubah Barang</h4><br>
+                <h4 class="modal-title">Ubah Satuan</h4><br>
             </div>
             <form id="form_update_barang" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="edit_nama_barang">Nama Barang</label>
-                        <input type="hidden" class="form-control" id="id_barang">
-                        <input type="text" class="form-control" id="edit_nama_barang" onkeyup="this.value = this.value.toUpperCase()">
-                        <!-- <label style="font-weight: normal; color: blue;">Isi beserta merek dan satuannya, misal : Semen Merdeka 40KG</label> -->
-                    </div>
-                    <div class="form-group">
-                        <label for="satuan">SATUAN</label>
-                        <select name="edit_satuan" id="edit_satuan" class="form-control">
-                            <?php
-                            foreach ($satuan as $key => $val) {
-                                ?>
-                                <option value="<?= $val['satuan'] ?>"><?= $val['satuan'] ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
+                        <label for="nama_barang">Nama Satuan</label>
+                        <input type="hidden" class="form-control" id="id_satuan">
+                        <input type="text" class="form-control" id="edit_satuan" onkeyup="this.value = this.value.toUpperCase()">
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -96,25 +82,13 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">TAMBAH BARANG</h4><br>
+                <h4 class="modal-title">TAMBAH SATUAN</h4><br>
             </div>
-            <form id="form_tambah_barang" method="post" enctype="multipart/form-data">
+            <form id="form_tambah_satuan" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="nama_barang">NAMA BARANG</label>
-                        <input type="text" class="form-control" id="nama_barang" onkeyup="this.value = this.value.toUpperCase()">
-                    </div>
-                    <div class="form-group">
-                        <label for="satuan">SATUAN</label>
-                        <select name="satuan" id="satuan" class="form-control">
-                            <?php
-                            foreach ($satuan as $key => $val) {
-                                ?>
-                                <option value="<?= $val['satuan'] ?>"><?= $val['satuan'] ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
+                        <label for="satuan">NAMA SATUAN</label>
+                        <input type="text" class="form-control" id="satuan" onkeyup="this.value = this.value.toUpperCase()">
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -133,7 +107,7 @@
 <script>
     <?php $target = 0; ?>
     $(function() {
-        $("#tableBarang").DataTable({
+        $("#tableSatuan").DataTable({
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
@@ -145,20 +119,13 @@
 
             'ajax': {
                 'dataType': 'json',
-                'url': '<?= base_url('user/ajax_table_barang') ?>',
+                'url': '<?= base_url('user/ajax_table_satuan') ?>',
                 'type': 'post',
             },
             'columns': [{
                 "target": [<?= $target ?>],
                 "className": 'text-center py-1',
                 "data": "data.no",
-            }, {
-                "target": [<?= $target++ ?>],
-                "className": 'text-left py-1',
-                "data": "data",
-               "render": function(data) {
-                    return data.nama_barang + `<br><h5 style="padding-top:0px;margin-top:0px;font-weight:bold;">` + data.kode_barang + `</h5>`
-                }
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-left py-1',
@@ -172,7 +139,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `','` + data.nama_barang + `','` + data.satuan + `')"><i class="fa fa-edit"></i> Ubah</button>`
+                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `','` + data.satuan + `')"><i class="fa fa-edit"></i> Ubah</button>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',
@@ -185,7 +152,7 @@
     });
 
     function reload_table() {
-        $('#tableBarang').DataTable().ajax.reload(null, false);
+        $('#tableSatuan').DataTable().ajax.reload(null, false);
     }
 
     function process_submit() {
@@ -198,13 +165,12 @@
         $("#btn-process").hide()
     }
 
-    function ubah_data(id, item, satuan) {
+    function ubah_data(id, item) {
 
         $('#modal-ubah-data').modal('show')
 
-        $('#id_barang').val(id)
-        $('#edit_nama_barang').val(item)
-        $('#edit_satuan').val(satuan)
+        $('#id_satuan').val(id)
+        $('#edit_satuan').val(item)
     }
 
     function delete_data(id) {
@@ -222,7 +188,7 @@
                 $.ajax({
                     url: '<?= base_url() ?>user/delete',
                     data: {
-                        table: 'mst_barang',
+                        table: 'mst_satuan',
                         id: id
                     },
                     type: 'post',
@@ -247,7 +213,7 @@
     $("#form_update_barang").submit(function(e) {
         e.preventDefault()
 
-        if ($('#id_barang').val() == '' || $('#edit_nama_barang').val() == '') {
+        if ($('#id_satuan').val() == '' || $('#edit_satuan').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',
@@ -258,14 +224,12 @@
 
         // process_submit()
         var url_ajax = '<?= base_url() ?>user/ubah'
-        var id = $('#id_barang').val();
-        var nama_barang = $('#edit_nama_barang').val();
-        var edit_satuan = $('#edit_satuan').val();
+        var id = $('#id_satuan').val();
+        var satuan = $('#edit_satuan').val();
         var form_data = new FormData();
-        form_data.append('table', 'mst_barang');
+        form_data.append('table', 'mst_satuan');
         form_data.append('id', id);
-        form_data.append('nama_barang', nama_barang);
-        form_data.append('satuan', edit_satuan);
+        form_data.append('satuan', satuan);
 
         $.ajax({
             url: url_ajax,
@@ -283,7 +247,7 @@
                         text: result.message,
                     })
                     $('#modal-ubah-data').modal("hide");
-                    $('#edit_nama_barang').val('');
+                    $('#edit_satuan').val('');
                     // close_edit()
                     reload_table()
                     // default_submit()
@@ -309,14 +273,14 @@
         });
     })
 
-    function tambah_barang() {
+    function tambah_satuan() {
         $('#modal-tambah-data').modal('show')
     }
 
-    $("#form_tambah_barang").submit(function(e) {
+    $("#form_tambah_satuan").submit(function(e) {
         e.preventDefault()
 
-        if ($('#nama_barang').val() == '') {
+        if ($('#satuan').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',
@@ -326,14 +290,12 @@
         }
 
         // process_submit()
-        var url_ajax = '<?= base_url() ?>user/tambah_barang'
+        var url_ajax = '<?= base_url() ?>user/tambah'
 
-        var item = $('#nama_barang').val();
-        var satuan = $('#satuan').val();
+        var item = $('#satuan').val();
         var form_data = new FormData();
-        form_data.append('table', 'mst_barang');
-        form_data.append('nama_barang', item);
-        form_data.append('satuan', satuan);
+        form_data.append('table', 'mst_satuan');
+        form_data.append('satuan', item);
 
         $.ajax({
             url: url_ajax,
@@ -351,7 +313,7 @@
                         text: result.message,
                     })
                     $('#modal-tambah-data').modal("hide");
-                    $('#nama_barang').val('');
+                    $('#satuan').val('');
                     // close_edit()
                     reload_table()
                     // default_submit()

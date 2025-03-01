@@ -20,9 +20,6 @@ class User extends CI_Controller
             redirect('auth');
         }
         $this->load->model("Crud", "crud");
-        $this->load->model("Crud2", "crud2");
-        $this->load->model("Crud3", "crud3");
-        $this->load->model("Crud4", "crud4");
     }
 
     public function index()
@@ -46,9 +43,20 @@ class User extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    public function satuan()
+    {
+        $data['title'] = 'Satuan | Hitung RAB';
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('rab/satuan');
+        $this->load->view('template/footer');
+    }
+
     public function material()
     {
         $data['title'] = 'Material | Hitung RAB';
+        $data['satuan'] = $this->crud->get_all('mst_satuan')->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -59,6 +67,7 @@ class User extends CI_Controller
     public function jasa()
     {
         $data['title'] = 'Jasa | Hitung RAB';
+         $data['satuan'] = $this->crud->get_all('mst_satuan')->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -70,6 +79,7 @@ class User extends CI_Controller
     {
         $data['title'] = 'Pekerjaan | Hitung RAB';
         $data['kab_kota'] = $this->crud->get_all('mst_lokasi')->result_array();
+        $data['satuan'] = $this->crud->get_all('mst_satuan')->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -387,12 +397,13 @@ class User extends CI_Controller
             'id' => $id_mst_lokasi
         );
         $getLokasi = $this->crud->get_where('mst_lokasi', $whereLokasi)->row_array();
-        $getLokasi['kab_kota'];
+        // $getLokasi['kab_kota'];
 
         $data = array(
             'id_mst_barang' => $id_mst_barang,
             'kode_barang' => $getBrg['kode_barang'],
             'nama_barang' => $getBrg['nama_barang'],
+            'satuan' => $getBrg['satuan'],
             'harga' => $harga,
             'id_mst_lokasi' => $id_mst_lokasi,
             'kab_kota' => $getLokasi['kab_kota']
@@ -441,6 +452,7 @@ class User extends CI_Controller
             'id_mst_jasa' => $id_mst_jasa,
             'kode_jasa' => $getJs['kode_jasa'],
             'nama_jasa' => $getJs['nama_jasa'],
+            'satuan' => $getJs['satuan'],
             'harga' => $harga,
             'id_mst_lokasi' => $id_mst_lokasi,
             'kab_kota' => $getLokasi['kab_kota']
@@ -457,16 +469,53 @@ class User extends CI_Controller
         echo json_encode($response);
     }
 
+    public function ajax_table_satuan()
+    {
+        $table = 'mst_satuan'; //nama tabel dari database
+
+        $where = null;
+
+        $column_order = array('id', 'satuan', 'date_created'); //field yang ada di table 
+        $column_search = array('id', 'satuan', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, satuan, date_created';
+        $group = 'id, satuan, date_created';
+        $order = array('id' => 'desc'); // default order 
+        $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where, $group);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $key) {
+            $no++;
+            $row = array();
+            $row['data']['no'] = $no;
+            $row['data']['id'] = trim($key->id);
+            $row['data']['satuan'] = trim($key->satuan);
+            $row['data']['date_created'] = date('d-M-Y H:i:s', strtotime($key->date_created));
+
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->crud->count_all($table),
+            "recordsFiltered" => $this->crud->count_filtered($table, $select, $column_order, $column_search, $order, $where, $group),
+            "data" => $data,
+            "query" => $this->db->last_query(),
+            // "list_data" => var_dump($list)
+        );
+        //output to json format
+        echo json_encode($output);
+    }
+
     public function ajax_table_barang()
     {
         $table = 'mst_barang'; //nama tabel dari database
 
         $where = null;
 
-        $column_order = array('id', 'kode_barang', 'nama_barang', 'date_created'); //field yang ada di table 
-        $column_search = array('id', 'kode_barang', 'nama_barang', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, kode_barang, nama_barang, date_created';
-        $group = 'id, kode_barang, nama_barang, date_created';
+        $column_order = array('id', 'kode_barang', 'nama_barang', 'satuan', 'date_created'); //field yang ada di table 
+        $column_search = array('id', 'kode_barang', 'nama_barang', 'satuan', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, kode_barang, nama_barang, satuan, date_created';
+        $group = 'id, kode_barang, nama_barang, satuan, date_created';
         $order = array('id' => 'desc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where, $group);
         $data = array();
@@ -478,6 +527,7 @@ class User extends CI_Controller
             $row['data']['id'] = trim($key->id);
             $row['data']['kode_barang'] = trim($key->kode_barang);
             $row['data']['nama_barang'] = trim($key->nama_barang);
+            $row['data']['satuan'] = trim($key->satuan);
             $row['data']['date_created'] = date('d-M-Y H:i:s', strtotime($key->date_created));
 
             $data[] = $row;
@@ -501,10 +551,10 @@ class User extends CI_Controller
 
         $where = null;
 
-        $column_order = array('id', 'kode_jasa', 'nama_jasa', 'date_created'); //field yang ada di table 
-        $column_search = array('id', 'kode_jasa', 'nama_jasa', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, kode_jasa, nama_jasa, date_created';
-        $group = 'id, kode_jasa, nama_jasa, date_created';
+        $column_order = array('id', 'kode_jasa', 'nama_jasa', 'satuan', 'date_created'); //field yang ada di table 
+        $column_search = array('id', 'kode_jasa', 'nama_jasa', 'satuan', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, kode_jasa, nama_jasa, satuan, date_created';
+        $group = 'id, kode_jasa, nama_jasa, satuan, date_created';
         $order = array('id' => 'desc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where, $group);
         $data = array();
@@ -516,6 +566,7 @@ class User extends CI_Controller
             $row['data']['id'] = trim($key->id);
             $row['data']['kode_jasa'] = trim($key->kode_jasa);
             $row['data']['nama_jasa'] = trim($key->nama_jasa);
+            $row['data']['satuan'] = trim($key->satuan);
             $row['data']['date_created'] = date('d-M-Y H:i:s', strtotime($key->date_created));
 
             $data[] = $row;
@@ -569,10 +620,10 @@ class User extends CI_Controller
 
         $where = null;
 
-        $column_order = array('id', 'id_mst_barang', 'kode_barang', 'nama_barang', 'harga', 'id_mst_lokasi', 'kab_kota', 'date_created'); //field yang ada di table 
-        $column_search = array('id', 'id_mst_barang', 'kode_barang', 'nama_barang', 'harga', 'id_mst_lokasi', 'kab_kota', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, id_mst_barang, kode_barang, nama_barang, harga, id_mst_lokasi, kab_kota, date_created';
-        $group = 'id, id_mst_barang, kode_barang, nama_barang, harga, id_mst_lokasi, kab_kota, date_created';
+        $column_order = array('id', 'id_mst_barang', 'kode_barang', 'nama_barang', 'satuan', 'harga', 'id_mst_lokasi', 'kab_kota', 'date_created'); //field yang ada di table 
+        $column_search = array('id', 'id_mst_barang', 'kode_barang', 'nama_barang', 'satuan', 'harga', 'id_mst_lokasi', 'kab_kota', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, id_mst_barang, kode_barang, nama_barang, satuan, harga, id_mst_lokasi, kab_kota, date_created';
+        $group = 'id, id_mst_barang, kode_barang, nama_barang, satuan, harga, id_mst_lokasi, kab_kota, date_created';
         $order = array('id' => 'desc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where, $group);
         $data = array();
@@ -585,6 +636,7 @@ class User extends CI_Controller
             $row['data']['id_mst_barang'] = trim($key->id_mst_barang);
             $row['data']['kode_barang'] = trim($key->kode_barang);
             $row['data']['nama_barang'] = trim($key->nama_barang);
+            $row['data']['satuan'] = trim($key->satuan);
             $row['data']['harga'] = 'Rp. ' . number_format(trim($key->harga), 2);
             $row['data']['id_mst_lokasi'] = trim($key->id_mst_lokasi);
             $row['data']['kab_kota'] = trim($key->kab_kota);
@@ -611,10 +663,10 @@ class User extends CI_Controller
 
         $where = null;
 
-        $column_order = array('id', 'id_mst_jasa', 'kode_jasa', 'nama_jasa', 'harga', 'id_mst_lokasi', 'kab_kota', 'date_created'); //field yang ada di table 
-        $column_search = array('id', 'id_mst_jasa', 'kode_jasa', 'nama_jasa', 'harga', 'id_mst_lokasi', 'kab_kota', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, id_mst_jasa, kode_jasa, nama_jasa, harga, id_mst_lokasi, kab_kota, date_created';
-        $group = 'id, id_mst_jasa, kode_jasa, nama_jasa, harga, id_mst_lokasi, kab_kota, date_created';
+        $column_order = array('id', 'id_mst_jasa', 'kode_jasa', 'nama_jasa', 'satuan', 'harga', 'id_mst_lokasi', 'kab_kota', 'date_created'); //field yang ada di table 
+        $column_search = array('id', 'id_mst_jasa', 'kode_jasa', 'nama_jasa', 'satuan', 'harga', 'id_mst_lokasi', 'kab_kota', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, id_mst_jasa, kode_jasa, nama_jasa, satuan, harga, id_mst_lokasi, kab_kota, date_created';
+        $group = 'id, id_mst_jasa, kode_jasa, nama_jasa, satuan, harga, id_mst_lokasi, kab_kota, date_created';
         $order = array('id' => 'desc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where, $group);
         $data = array();
@@ -627,6 +679,7 @@ class User extends CI_Controller
             $row['data']['id_mst_jasa'] = trim($key->id_mst_jasa);
             $row['data']['kode_jasa'] = trim($key->kode_jasa);
             $row['data']['nama_jasa'] = trim($key->nama_jasa);
+            $row['data']['satuan'] = trim($key->satuan);
             $row['data']['harga'] = 'Rp. ' . number_format(trim($key->harga), 2);
             $row['data']['id_mst_lokasi'] = trim($key->id_mst_lokasi);
             $row['data']['kab_kota'] = trim($key->kab_kota);
@@ -653,10 +706,10 @@ class User extends CI_Controller
 
         $where = null;
 
-        $column_order = array('id', 'kode_pekerjaan', 'uraian_pekerjaan', 'kab_kota', 'harga_origin', 'date_created'); //field yang ada di table 
-        $column_search = array('id', 'kode_pekerjaan', 'uraian_pekerjaan',  'kab_kota', 'harga_origin', 'date_created'); //field yang diizin untuk pencarian 
-        $select = 'id, kode_pekerjaan, uraian_pekerjaan,  kab_kota, harga_origin, date_created';
-        $group = 'id, kode_pekerjaan, uraian_pekerjaan,  kab_kota, harga_origin, date_created';
+        $column_order = array('id', 'kode_pekerjaan', 'uraian_pekerjaan', 'satuan','kab_kota', 'harga_origin', 'date_created'); //field yang ada di table 
+        $column_search = array('id', 'kode_pekerjaan', 'uraian_pekerjaan',  'satuan','kab_kota', 'harga_origin', 'date_created'); //field yang diizin untuk pencarian 
+        $select = 'id, kode_pekerjaan, uraian_pekerjaan,  satuan, kab_kota, harga_origin, date_created';
+        $group = 'id, kode_pekerjaan, uraian_pekerjaan,  satuan, kab_kota, harga_origin, date_created';
         $order = array('id' => 'desc'); // default order 
         $list = $this->crud->get_datatables($table, $select, $column_order, $column_search, $order, $where, $group);
         $data = array();
@@ -668,6 +721,7 @@ class User extends CI_Controller
             $row['data']['id'] = trim($key->id);
             $row['data']['kode_pekerjaan'] = trim($key->kode_pekerjaan);
             $row['data']['uraian_pekerjaan'] = trim($key->uraian_pekerjaan);
+            $row['data']['satuan'] = trim($key->satuan);
             $row['data']['kab_kota'] = trim($key->kab_kota);
             $row['data']['harga_origin'] =  'Rp. ' . number_format(trim($key->harga_origin), 2);
             $row['data']['date_created'] = date('d-M-Y H:i:s', strtotime($key->date_created));
@@ -923,7 +977,10 @@ class User extends CI_Controller
     {
         $table = 'tbl_rab_detail'; //nama tabel dari database
 
-        $where = null;
+        $so_number = $this->input->post('so_number');
+        $where = array(
+            'so_number' => $so_number
+        );
 
         $column_order = array('id', 'id_tbl_rab_header', 'so_number', 'customer', 'kode_pekerjaan', 'uraian_pekerjaan', 'harga_origin', 'qty', 'harga_konversi', 'margin_persen', 'margin_amount', 'resiko_persen', 'resiko_amount','harga_final','profit','date_created'); //field yang ada di table 
         $column_search = array('id', 'id_tbl_rab_header', 'so_number', 'customer',  'kode_pekerjaan', 'uraian_pekerjaan', 'harga_origin', 'qty', 'harga_konversi', 'margin_persen', 'margin_amount', 'resiko_persen', 'resiko_amount','harga_final','profit','date_created'); //field yang diizin untuk pencarian 
@@ -976,9 +1033,19 @@ class User extends CI_Controller
         $customer = $this->input->post("customer");
         $alamat = $this->input->post("alamat");
         $hp = $this->input->post("hp");
+        $kegiatan_pekerjaan = $this->input->post("kegiatan_pekerjaan");
+        $luas_area = $this->input->post("luas_area");
 
-        // $data = $this->input->post();
-        // unset($data['table']);
+        //cek dulu apakah SO sudah ada?
+        $whereSo = array(
+            'so_number' => $so_number
+        );
+        $getPrev = $this->crud->count_where('tbl_rab_header', $whereSo);
+        if ($getPrev > 0) {
+            $response = ['status' => 'error', 'message' => 'SO sudah terdaftar di database!'];
+            echo json_encode($response);
+            die;
+        }
 
         //ambil data
         $where = array(
@@ -990,6 +1057,8 @@ class User extends CI_Controller
 
         $data = Array(
             'so_number' => $so_number,
+            'kegiatan_pekerjaan' => $kegiatan_pekerjaan,
+            'luas_area' => $luas_area,
             'customer' => $customer,
             'alamat' => $alamat,
             'hp' => $hp,
@@ -997,6 +1066,8 @@ class User extends CI_Controller
         );
 
         $insert = $this->crud->insert($table, $data);
+        // echo $this->db->last_query();
+        // die;
 
 
         if ($this->db->affected_rows() == TRUE) {
@@ -1145,6 +1216,19 @@ class User extends CI_Controller
             $response = ['status' => 'error', 'message' => 'Data Gagal Dihapus!'];
 
         echo json_encode($response);
+    }
+
+    public function print_rab()
+    {
+        $so_number = $_GET['so_number'];
+        $where = array(
+            'so_number' => $so_number
+        );
+
+        $data['header'] = $this->crud->get_where('tbl_rab_header', $where)->row_array();
+        $data['detail'] = $this->crud->get_where('tbl_rab_detail', $where)->result_array();
+
+        $this->load->view('report/printrab', $data);
     }
 
 }

@@ -29,6 +29,7 @@
                                 <tr>
                                     <th style="width: 5%">NO</th>
                                     <th style="width: 40%">Nama Jasa</th>
+                                    <th>Satuan</th>
                                     <th>Area/Wilayah</th>
                                     <th>Harga</th>
                                     <th>Register Date</th>
@@ -60,6 +61,10 @@
             </div>
             <form id="form_update_harga" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit_nama_jasa">Nama Jasa</label>
+                        <input type="text" class="form-control" id="edit_nama_jasa" readonly>
+                    </div>
                     <div class="form-group">
                         <label for="harga">Harga</label>
                         <input type="hidden" class="form-control" id="id_harga">
@@ -93,13 +98,14 @@
             </div>
             <form id="form_tambah_harga" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="id_mst_jasa">NAMA JASA</label>
-                        <select name="id_mst_jasa" id="id_mst_jasa" class="form-control">
+                      <div class="form-group">
+                        <label for="id_mst_jasa">PILIH JASA</label><br>
+                        <select name="id_mst_jasa" id="id_mst_jasa" style="width: 100%" class="js-example-basic-multiple">
                             <?php
                             foreach ($jasa as $key1 => $value1) {
-                                echo '<option value=' . $value1['id'] . '>' . $value1['nama_jasa'] . '</option>';
+                                echo '<option value=' . $value1['id'] . '>' . $value1['nama_jasa'] . ' - ' . $value1['satuan'] . '</option>';
                             }
+
                             ?>
                         </select>
                     </div>
@@ -135,6 +141,7 @@
 <script>
     <?php $target = 0; ?>
     $(function() {
+        $('#id_mst_jasa').select2();
         $("#tableHarga").DataTable({
             "responsive": true,
             "lengthChange": false,
@@ -165,8 +172,12 @@
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
+                "data": "data.satuan",
+            },  {
+                "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
                 "data": "data.kab_kota",
-            }, {
+            },{
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
                 "data": "data.harga",
@@ -179,7 +190,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `','` + data.kab_kota + `','` + data.harga + `')"><i class="fa fa-edit"></i> Ubah</button>`
+                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `','` + data.kab_kota + `','` + data.nama_jasa + `','` + data.harga + `')"><i class="fa fa-edit"></i> Ubah</button>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',
@@ -205,13 +216,14 @@
         $("#btn-process").hide()
     }
 
-    function ubah_data(id, item, harga) {
+    function ubah_data(id, item, nama_jasa, harga) {
 
         $('#modal-ubah-data').modal('show')
 
         $('#id_harga').val(id)
         $('#edit_harga').val(harga)
         $('#edit_kab_kota').val(item)
+        $('#edit_nama_jasa').val(nama_jasa)
     }
 
     function delete_data(id) {
