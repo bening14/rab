@@ -6,8 +6,8 @@
 
         <div class="callout callout-success">
             <h4 style="text-decoration: underline;">CATATAN</h4>
-            <p>! Input hanya MATERIAL SAJA</p>
-            <p>! Data JASA di Inputkan di Harga JASA/TUKANG</p>
+            <p>! -</p>
+            <p>! -</p>
         </div>
 
     </section>
@@ -18,18 +18,22 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title"><strong>MASTER MATERIAL</strong></h3>
-                        <button class="btn bg-navy pull-right" onclick="tambah_barang()"><i class="fa fa-plus"></i> Tambah Barang</button>
+                        <h3 class="box-title"><strong>LIST RAB CUSTOMER</strong></h3>
+                        <button class="btn bg-navy pull-right" onclick="tambah_harga()"><i class="fa fa-plus"></i> Tambah RAB</button>
                     </div>
 
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="tableBarang" class="table table-bordered table-hover">
+                        <table id="tableRab" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th style="width: 5%">NO</th>
-                                    <th style="width: 30%">Kode Barang</th>
-                                    <th>Nama Barang</th>
+                                    <th style="width: 8%">SO Number</th>
+                                    <th style="width: 20%">Customer</th>
+                                    <th>Nilai Origin</th>
+                                    <th>Nilai Final</th>
+                                    <th>Profit</th>
+                                    <th>Area/Wilayah</th>
                                     <th>Register Date</th>
                                     <th style="width: 20%">AKSI</th>
                                 </tr>
@@ -55,15 +59,26 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Ubah Barang</h4><br>
+                <h4 class="modal-title">Ubah RAB</h4><br>
             </div>
-            <form id="form_update_barang" method="post" enctype="multipart/form-data">
+            <form id="form_update_rab" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="nama_barang">Nama Barang</label>
-                        <input type="hidden" class="form-control" id="id_barang">
-                        <input type="text" class="form-control" id="edit_nama_barang" onkeyup="this.value = this.value.toUpperCase()">
-                        <label style="font-weight: normal; color: blue;">Isi beserta merek dan satuannya, misal : Semen Merdeka 40KG</label>
+                        <label for="edit_so_number">SO Number</label>
+                        <input type="text" class="form-control" id="edit_so_number" onkeyup="this.value = this.value.toUpperCase()">
+                        <input type="hidden" class="form-control" id="id_rab">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_customer">Customer</label>
+                        <input type="text" class="form-control" id="edit_customer" onkeyup="this.value = this.value.toUpperCase()">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_alamat">Alamat</label>
+                        <input type="text" class="form-control" id="edit_alamat">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_hp">Nomor HP</label>
+                        <input type="text" class="form-control" id="edit_hp">
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -84,13 +99,35 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">TAMBAH BARANG</h4><br>
+                <h4 class="modal-title">TAMBAH RAB</h4><br>
             </div>
-            <form id="form_tambah_barang" method="post" enctype="multipart/form-data">
+            <form id="form_tambah_rab" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="nama_barang">NAMA BARANG</label>
-                        <input type="text" class="form-control" id="nama_barang" onkeyup="this.value = this.value.toUpperCase()">
+                        <label for="so_number">SO Number</label>
+                        <input type="text" class="form-control" id="so_number" onkeyup="this.value = this.value.toUpperCase()">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer">Customer</label>
+                        <input type="text" class="form-control" id="customer" onkeyup="this.value = this.value.toUpperCase()">
+                    </div>
+                    <div class="form-group">
+                        <label for="alamat">Alamat</label>
+                        <input type="text" class="form-control" id="alamat">
+                    </div>
+                    <div class="form-group">
+                        <label for="hp">Nomor HP</label>
+                        <input type="text" class="form-control" id="hp">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_mst_lokasi">AREA/WILAYAH</label>
+                        <select name="id_mst_lokasi" id="id_mst_lokasi" class="form-control">
+                            <?php
+                            foreach ($kab_kota as $key => $value) {
+                                echo '<option value=' . $value['id'] . '>' . $value['kab_kota'] . '</option>';
+                            }
+                            ?>
+                        </select>
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -101,7 +138,7 @@
             </form>
         </div>
 
-    </div>
+</div>
 
 </div>
 
@@ -109,7 +146,7 @@
 <script>
     <?php $target = 0; ?>
     $(function() {
-        $("#tableBarang").DataTable({
+        $("#tableRab").DataTable({
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
@@ -121,7 +158,7 @@
 
             'ajax': {
                 'dataType': 'json',
-                'url': '<?= base_url('user/ajax_table_barang') ?>',
+                'url': '<?= base_url('user/ajax_table_rab') ?>',
                 'type': 'post',
             },
             'columns': [{
@@ -131,11 +168,30 @@
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-left py-1',
-                "data": "data.kode_barang",
+                "data": "data.so_number",
+            }, {
+                "target": [<?= $target++ ?>],
+                "className": 'text-left py-1',
+                "data": "data",
+                "render": function(data) {
+                    return `<strong>` + data.customer + `</strong><br>` + data.alamat + `<br>` + data.hp
+                }
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
-                "data": "data.nama_barang",
+                "data": "data.nilai_origin",
+            }, {
+                "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
+                "data": "data.nilai_final",
+            }, {
+                "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
+                "data": "data.profit",
+            },  {
+                "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
+                "data": "data.kab_kota",
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-center py-1',
@@ -145,7 +201,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `','` + data.nama_barang + `')"><i class="fa fa-edit"></i> Ubah</button>`
+                    return `<button class="btn btn-sm btn-default" onclick="cetak('` + data.id + `')"><i class="fa fa-print"></i> Cetak</button>&nbsp;<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `')"><i class="fa fa-edit"></i> Ubah</button>&nbsp;<a href="<?= base_url('user/rab_detail?so_number=') ?>${data.so_number}&customer=${data.customer}&kota=${data.kab_kota}&alamat=${data.alamat}&hp=${data.hp}" type="button" class="btn btn-primary btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',
@@ -158,7 +214,7 @@
     });
 
     function reload_table() {
-        $('#tableBarang').DataTable().ajax.reload(null, false);
+        $('#tableRab').DataTable().ajax.reload(null, false);
     }
 
     function process_submit() {
@@ -171,12 +227,11 @@
         $("#btn-process").hide()
     }
 
-    function ubah_data(id, item) {
+    function ubah_data(id) {
 
         $('#modal-ubah-data').modal('show')
 
-        $('#id_barang').val(id)
-        $('#edit_nama_barang').val(item)
+        $('#id_rab').val(id)
     }
 
     function delete_data(id) {
@@ -194,7 +249,7 @@
                 $.ajax({
                     url: '<?= base_url() ?>user/delete',
                     data: {
-                        table: 'mst_barang',
+                        table: 'tbl_rab_header',
                         id: id
                     },
                     type: 'post',
@@ -216,10 +271,10 @@
 
     }
 
-    $("#form_update_barang").submit(function(e) {
+    $("#form_update_rab").submit(function(e) {
         e.preventDefault()
 
-        if ($('#id_barang').val() == '' || $('#edit_nama_barang').val() == '') {
+        if ($('#edit_so_number').val() == '' || $('#edit_customer').val() == '' || $('#edit_alamat').val() == '' || $('#edit_hp').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',
@@ -230,12 +285,18 @@
 
         // process_submit()
         var url_ajax = '<?= base_url() ?>user/ubah'
-        var id = $('#id_barang').val();
-        var nama_barang = $('#edit_nama_barang').val();
+        var id = $('#id_rab').val();
+        var so_number = $('#edit_so_number').val();
+        var customer = $('#edit_customer').val();
+        var alamat = $('#edit_alamat').val();
+        var hp = $('#edit_hp').val();
         var form_data = new FormData();
-        form_data.append('table', 'mst_barang');
+        form_data.append('table', 'tbl_rab_header');
         form_data.append('id', id);
-        form_data.append('nama_barang', nama_barang);
+        form_data.append('so_number', so_number);
+        form_data.append('customer', customer);
+        form_data.append('alamat', alamat);
+        form_data.append('hp', hp);
 
         $.ajax({
             url: url_ajax,
@@ -253,7 +314,10 @@
                         text: result.message,
                     })
                     $('#modal-ubah-data').modal("hide");
-                    $('#edit_nama_barang').val('');
+                    $('#edit_so_number').val('');
+                    $('#edit_customer').val('');
+                    $('#edit_alamat').val('');
+                    $('#edit_hp').val('');
                     // close_edit()
                     reload_table()
                     // default_submit()
@@ -279,14 +343,14 @@
         });
     })
 
-    function tambah_barang() {
+    function tambah_harga() {
         $('#modal-tambah-data').modal('show')
     }
 
-    $("#form_tambah_barang").submit(function(e) {
+    $("#form_tambah_rab").submit(function(e) {
         e.preventDefault()
 
-        if ($('#nama_barang').val() == '') {
+        if ($('#so_number').val() == '' || $('#customer').val() == '' || $('#alamat').val() == '' || $('#hp').val() == '' || $('#kab_kota').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',
@@ -296,12 +360,20 @@
         }
 
         // process_submit()
-        var url_ajax = '<?= base_url() ?>user/tambah_barang'
+        var url_ajax = '<?= base_url() ?>user/tambah_hitung_rab'
 
-        var item = $('#nama_barang').val();
+        var so_number = $('#so_number').val();
+        var customer = $('#customer').val();
+        var alamat = $('#alamat').val();
+        var hp = $('#hp').val();
+        var id_mst_lokasi = $('#id_mst_lokasi').val();
         var form_data = new FormData();
-        form_data.append('table', 'mst_barang');
-        form_data.append('nama_barang', item);
+        form_data.append('table', 'tbl_rab_header');
+        form_data.append('so_number', so_number);
+        form_data.append('customer', customer);
+        form_data.append('alamat', alamat);
+        form_data.append('hp', hp);
+        form_data.append('id_mst_lokasi', id_mst_lokasi);
 
         $.ajax({
             url: url_ajax,
@@ -319,7 +391,10 @@
                         text: result.message,
                     })
                     $('#modal-tambah-data').modal("hide");
-                    $('#nama_barang').val('');
+                    $('#so_number').val('');
+                    $('#customer').val('');
+                    $('#alamat').val('');
+                    $('#hp').val('');
                     // close_edit()
                     reload_table()
                     // default_submit()

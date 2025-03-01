@@ -18,7 +18,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Harga Jasa</h3>
+                        <h3 class="box-title"><strong>HARGA JASA</strong></h3>
                         <button class="btn bg-navy pull-right" onclick="tambah_harga()"><i class="fa fa-plus"></i> Tambah Harga</button>
                     </div>
 

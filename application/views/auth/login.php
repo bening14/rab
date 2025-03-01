@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>ILS | Log in</title>
+    <title>PT. STI | Log in</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/adminlte/') ?>dist/css/AdminLTE.min.css">
     <!-- iCheck -->
     <link rel="stylesheet" href="<?= base_url('assets/adminlte/') ?>plugins/iCheck/square/blue.css">
-    <link rel="shortcut icon" href="<?= base_url('assets/adminlte/') ?>dist/img/money.png" />
+    <link rel="shortcut icon" href="<?= base_url('assets/') ?>logo.png" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,10 +33,10 @@
 <body class="hold-transition login-page">
     <div class="login-box" style="margin-top: auto; margin-bottom: auto; padding-top: 15vh;">
         <div class="login-logo" style="margin-bottom:0px;">
-            <a href="#"><b>Inventory</b>System</a><br>
-
+            <img src="<?= base_url('assets/logo.png') ?>" alt="logo sti" width= 15%><br>
+            <a href="#">Rencana Anggaran Biaya</a><br>
         </div>
-        <div style="font-size: 18px;text-align:center; font-weight: bold;">PORTAL SCRAP</div><br>
+        <div style="font-size: 18px;text-align:center; font-weight: bold;">PT. Solusi Tukang Indonesia</div><br>
         <!-- /.login-logo -->
         <div class="login-box-body">
             <p class="login-box-msg">Sign in to start your session</p>

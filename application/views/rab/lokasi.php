@@ -18,7 +18,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Area Kerja Solusi Tukang</h3>
+                        <h3 class="box-title"><strong>AREA KERJA SOLUSI TUKANG</strong></h3>
                         <button class="btn bg-navy pull-right" onclick="tambah_lokasi()"><i class="fa fa-plus"></i> Tambah Lokasi</button>
                     </div>
 

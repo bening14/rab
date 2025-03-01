@@ -6,8 +6,8 @@
 
         <div class="callout callout-success">
             <h4 style="text-decoration: underline;">CATATAN</h4>
-            <p>! Input uraian pekerjaan yang jelas beserta satuannya</p>
-            <p>! Setelah input uraian, silahkan isi detail bahan baku atau jasa yang dibutuhkan</p>
+            <p>! -</p>
+            <p>! -</p>
         </div>
 
     </section>
@@ -18,21 +18,32 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title"><strong>MASTER PEKERJAAN</strong></h3>
-                        <button class="btn bg-navy pull-right" onclick="tambah_pekerjaan()"><i class="fa fa-plus"></i> Tambah Pekerjaan</button>
+                        <h3 class="box-title" style="font-weight: bold;font-size: 28px;"><?= $_GET['so_number'] . ' - <small style="background-color: yellow;font-weight:bold;">' . $kota . '</small>' ?></h3>
+                        <h3><?= $customer ?></h3>
+                        <h4><?= $alamat.'<br>'.$hp ?></h4>
+                        <div id="harga_final">
+                            <h4 style="color: red;font-weight: bold;"> <color style="color: black;">Harga Final</color><br><?= $harga_total ?></h4>
+                        </div>
+                        <button class="btn bg-blue pull-right" onclick="tambah_pekerjaan()"><i class="fa fa-gavel"></i> Tambah Pekerjaan</button>
+                        <a href="<?= base_url('user') ?>" class="btn bg-red pull-right"><i class="fa fa-arrow-left"></i> Kembali</a>&nbsp;
                     </div>
 
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="tablePekerjaan" class="table table-bordered table-hover">
+                        <table id="tableRabDetail" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th style="width: 5%">NO</th>
-                                    <th style="width: 50%">Pekerjaan</th>
-                                    <th>Area/Wilayah</th>
-                                    <th>Harga Origin</th>
+                                    <th style="width: 15%">Pekerjaan</th>
+                                    <th>Nilai Origin</th>
+                                    <th>QTY</th>
+                                    <th>Nilai Konversi</th>
+                                    <th>Margin</th>
+                                    <th>Faktor Resiko</th>
+                                    <th>Nilai Final</th>
+                                    <th>Profit</th>
                                     <th>Register Date</th>
-                                    <th style="width: 15%">AKSI</th>
+                                    <th style="width: 10%">AKSI</th>
                                 </tr>
                             </thead>
                         </table>
@@ -55,25 +66,37 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">TAMBAH PEKERJAAN</h4><br>
+                <h4 class="modal-title" style="background-color: blue;color: white;padding: 10px 10px">TAMBAH PEKERJAAN</h4><br>
             </div>
             <form id="form_tambah_pekerjaan" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="uraian_pekerjaan">URAIAN PEKERJAAN</label>
-                        <input type="text" class="form-control" id="uraian_pekerjaan">
-                        <label style="font-weight: normal; color: blue;">Isi detail pekerjaan yang jelas beserta satuannya, misal : Plester Dinding 1 M3</label>
-                    </div>
-                    <div class="form-group">
-                        <label for="kab_kota">AREA/WILAYAH</label>
-                        <select name="kab_kota" id="kab_kota" class="form-control">
+                        <label for="barang">PILIH PEKERJAAN</label><br>
+                        <select name="pekerjaan-barang" id="pekerjaan-barang" style="width: 100%" class="js-example-basic-multiple">
                             <?php
-                            foreach ($kab_kota as $key => $value) {
-                                echo '<option value=' . $value["id"] . '>' . $value["kab_kota"] . '</option>';
+                            foreach ($detail_pekerjaan as $key => $val) {
+                                echo '<option value=' . $val["kode_pekerjaan"] . '>' . $val["uraian_pekerjaan"] . '</option>';
                             }
 
                             ?>
+                            <input type="hidden" value="<?= $_GET['kota'] ?>" class="form-control" id="kab_kota">
+                            <input type="hidden" value="<?= $_GET['so_number'] ?>" class="form-control" id="so_number">
                         </select>
+                        <div class="form-group" style="margin-top: 10px;">
+                            <label for="harga">QTY</label>
+                            <input type="text" class="form-control" id="qty">
+                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, ini merupakah Pekerjaan yang dilaksanakan</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="margin_persen">Margin (Persen)</label>
+                            <input type="text" class="form-control" id="margin_persen">
+                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, ini merupakah persentase keuntungan yang diinginkan</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="resiko_persen">Faktor Resiko (Persen)</label>
+                            <input type="text" class="form-control" id="resiko_persen">
+                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, tidak semua pekerjaan harus memiliki cost faktor resiko</label>
+                        </div>
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -92,7 +115,8 @@
 <script>
     <?php $target = 0; ?>
     $(function() {
-        $("#tablePekerjaan").DataTable({
+        $('#pekerjaan-barang').select2();
+        $("#tableRabDetail").DataTable({
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
@@ -104,8 +128,11 @@
 
             'ajax': {
                 'dataType': 'json',
-                'url': '<?= base_url('user/ajax_table_pekerjaan') ?>',
+                'url': '<?= base_url('user/ajax_table_rab_detail') ?>',
                 'type': 'post',
+                'data': {
+                    'so_number': '<?= $_GET["so_number"] ?>'
+                },
             },
             'columns': [{
                 "target": [<?= $target ?>],
@@ -121,12 +148,38 @@
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
-                "data": "data.kab_kota",
+                "data": "data.harga_final",
+            },{
+                "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
+                "data": "data.qty",
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
-                "data": "data.harga_origin",
+                "data": "data.harga_konversi",
+            },{
+                "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
+                "data": "data",
+                "render": function(data) {
+                    return data.margin_amount + `<br><h5 style="padding-top:0px;margin-top:0px;font-weight:bold;">` + data.margin_persen + ` %</h5>`
+                }
             }, {
+                "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
+                 "data": "data",
+                "render": function(data) {
+                    return data.resiko_amount + `<br><h5 style="padding-top:0px;margin-top:0px;font-weight:bold;">` + data.resiko_persen + ` %</h5>`
+                }
+            }, {
+                "target": [<?= $target++ ?>],
+                "className": 'text-center py-1',
+                "data": "data.harga_final",
+            },  {
+                "target": [<?= $target++ ?>],
+                "className": 'text-center py-1',
+                "data": "data.profit",
+            },{
                 "target": [<?= $target++ ?>],
                 "className": 'text-center py-1',
                 "data": "data.date_created",
@@ -135,7 +188,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<a href="<?= base_url('user/pekerjaan_detail?kode_pekerjaan=') ?>${data.kode_pekerjaan}&kota=${data.kab_kota}&uraian=${data.uraian_pekerjaan}" type="button" class="btn btn-info btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
+                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `','` + data.so_number + `')"><i class="fa fa-trash"></i> Hapus</button>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',
@@ -148,7 +201,7 @@
     });
 
     function reload_table() {
-        $('#tablePekerjaan').DataTable().ajax.reload(null, false);
+        $('#tableRabDetail').DataTable().ajax.reload(null, false);
     }
 
     function process_submit() {
@@ -161,8 +214,8 @@
         $("#btn-process").hide()
     }
 
-    function delete_data(id) {
-
+    function delete_data(id, so_number) {
+        var nama
         Swal.fire({
             title: 'Apakah Anda Yakin ?',
             text: "Data yang dihapus tidak bisa dikembalikan!",
@@ -174,9 +227,10 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '<?= base_url() ?>user/delete',
+                    url: '<?= base_url() ?>user/delete_detail_rab',
                     data: {
-                        table: 'tbl_pekerjaan_header',
+                        table: 'tbl_rab_detail',
+                        so_number: so_number,
                         id: id
                     },
                     type: 'post',
@@ -188,6 +242,8 @@
                                 'Data berhasil di hapus.',
                                 'success'
                             )
+                            nama= '<h4 style="color: red;font-weight: bold;"> <color style="color: black;">Harga Final</color><br>Rp. ' + result.nilai_final + '</h4>'
+                            $('#harga_final').html(nama)
                             reload_table()
                         } else
                             toast('error', result.message)
@@ -205,7 +261,7 @@
     $("#form_tambah_pekerjaan").submit(function(e) {
         e.preventDefault()
 
-        if ($('#uraian_pekerjaan').val() == '') {
+        if ($('#qty').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',
@@ -215,14 +271,22 @@
         }
 
         // process_submit()
-        var url_ajax = '<?= base_url() ?>user/tambah_pekerjaan'
+        var url_ajax = '<?= base_url() ?>user/tambah_rab_detail'
 
+        var kode_pekerjaan = $('#pekerjaan-barang').val();
         var kab_kota = $('#kab_kota').val();
-        var item = $('#uraian_pekerjaan').val();
+        var qty = $('#qty').val();
+        var margin_persen = $('#margin_persen').val();
+        var resiko_persen = $('#resiko_persen').val();
+        var so_number = $('#so_number').val();
         var form_data = new FormData();
-        form_data.append('table', 'tbl_pekerjaan_header');
+        form_data.append('table', 'tbl_rab_detail');
+        form_data.append('kode_pekerjaan', kode_pekerjaan);
         form_data.append('kab_kota', kab_kota);
-        form_data.append('uraian_pekerjaan', item);
+        form_data.append('qty', qty);
+        form_data.append('margin_persen', margin_persen);
+        form_data.append('resiko_persen', resiko_persen);
+        form_data.append('so_number', so_number);
 
         $.ajax({
             url: url_ajax,
@@ -240,8 +304,12 @@
                         text: result.message,
                     })
                     $('#modal-tambah-data').modal("hide");
-                    $('#uraian_pekerjaan').val('');
+                    $('#qty').val('');
+                    $('#margin_persen').val('');
+                    $('#resiko_persen').val('');
                     // close_edit()
+                    nama= '<h4 style="color: red;font-weight: bold;"> <color style="color: black;">Harga Final</color><br>Rp. ' + result.nilai_final + '</h4>'
+                    $('#harga_final').html(nama)
                     reload_table()
                     // default_submit()
                 } else {
@@ -265,4 +333,5 @@
             }
         });
     })
+
 </script>

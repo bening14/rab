@@ -18,7 +18,7 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Master Jasa</h3>
+                        <h3 class="box-title"><strong>MASTER JASA</strong></h3>
                         <button class="btn bg-navy pull-right" onclick="tambah_jasa()"><i class="fa fa-plus"></i> Tambah jasa</button>
                     </div>
 
