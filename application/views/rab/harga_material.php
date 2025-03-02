@@ -62,6 +62,10 @@
             <form id="form_update_harga" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
+                        <label for="edit_kab_kota">AREA/WILAYAH</label>
+                        <input type="text" class="form-control" id="edit_kab_kota" readonly>
+                    </div>
+                    <div class="form-group">
                         <label for="edit_nama_barang">Nama Barang/Material</label>
                         <input type="text" class="form-control" id="edit_nama_barang" readonly>
                     </div>
@@ -69,11 +73,8 @@
                         <label for="harga">Harga</label>
                         <input type="hidden" class="form-control" id="id_harga">
                         <input type="text" class="form-control" id="edit_harga" onkeyup="this.value = this.value.toUpperCase()">
-                        <label style="font-weight: normal; color: blue;">Hapus dulu, isikan dengan angka saja, contoh 5000</label>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_kab_kota">AREA/WILAYAH</label>
-                        <input type="text" class="form-control" id="edit_kab_kota" readonly>
+                        <label style="font-weight: normal; color: blue;">Hapus dulu, isikan dengan angka saja, contoh 5000</label><br>
+                        <label style="font-weight: normal; color: blue;"><strong>HARGA TOKO</strong>, bukan harga markup</label>
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -99,6 +100,16 @@
             <form id="form_tambah_harga" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
+                        <label for="id_mst_lokasi">AREA/WILAYAH</label>
+                        <select name="id_mst_lokasi" id="id_mst_lokasi" class="form-control">
+                            <?php
+                            foreach ($kab_kota as $key => $value) {
+                                echo '<option value=' . $value['id'] . '>' . $value['kab_kota'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="barang">PILIH MATERIAL</label><br>
                         <select name="id_mst_barang" id="id_mst_barang" style="width: 100%" class="js-example-basic-multiple">
                             <?php
@@ -112,17 +123,8 @@
                     <div class="form-group">
                         <label for="harga">HARGA</label>
                         <input type="text" class="form-control" id="harga">
-                        <label style="font-weight: normal; color: blue;">Isikan dengan angka saja, contoh 5000</label>
-                    </div>
-                    <div class="form-group">
-                        <label for="id_mst_lokasi">AREA/WILAYAH</label>
-                        <select name="id_mst_lokasi" id="id_mst_lokasi" class="form-control">
-                            <?php
-                            foreach ($kab_kota as $key => $value) {
-                                echo '<option value=' . $value['id'] . '>' . $value['kab_kota'] . '</option>';
-                            }
-                            ?>
-                        </select>
+                        <label style="font-weight: normal; color: blue;">Isikan dengan angka saja, contoh 5000</label><br>
+                        <label style="font-weight: normal; color: blue;"><strong>HARGA TOKO</strong>, bukan harga markup</label>
                     </div>
                 </div>
                 <div class=" modal-footer">

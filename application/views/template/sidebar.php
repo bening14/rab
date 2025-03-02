@@ -19,38 +19,7 @@
                     <span class="icon-bar"></span>
                 </a>
 
-                <div class="navbar-custom-menu">
-                    <ul class="nav navbar-nav">
-
-                        <!-- User Account: style can be found in dropdown.less -->
-                        <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="<?= base_url('assets/adminlte/') ?>dist/img/profilepicture.png" class="user-image" alt="User Image">
-                                <span class="hidden-xs">Sign Out</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <!-- User image -->
-                                <li class="user-header">
-                                    <img src="<?= base_url('assets/adminlte/') ?>dist/img/profilepicture.png" class="img-circle" alt="User Image">
-
-                                    <p>
-                                        <?= $this->session->userdata('username') ?>
-                                        <small>PT. Solusi Tukang Indonesia</small>
-                                    </p>
-                                </li>
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-
-                                    <div class="pull-right">
-                                        <a href="<?= base_url('auth/logout') ?>" class="btn btn-default btn-flat">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- Control Sidebar Toggle Button -->
-
-                    </ul>
-                </div>
+                
             </nav>
         </header>
         <!-- Left side column. contains the logo and sidebar -->
@@ -60,10 +29,10 @@
                 <!-- Sidebar user panel -->
                 <div class="user-panel">
                     <div class="pull-left image">
-                        <img src="<?= base_url('assets/adminlte/') ?>dist/img/profilepicture.png" class="img-circle" alt="User Image">
+                        <img src="<?= base_url('assets/') ?>logo.png" alt="User Image">
                     </div>
                     <div class="pull-left info">
-                        <p>PT. STI</p>
+                        <p><?= $this->session->userdata('nama') ?></p>
                         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                     </div>
                 </div>
@@ -75,6 +44,7 @@
                     <li class="header">RAB</li>
                     <li><a href="<?= base_url('user') ?>"><i class="fa fa-calculator"></i> <span>Hitung RAB</span></a></li>
                     <li class="header">MASTER</li>
+                    <li><a href="<?= base_url('user/user') ?>"><i class="fa fa-user"></i> <span>Master User</span></a></li>
                     <li><a href="<?= base_url('user/lokasi') ?>"><i class="fa fa-map"></i> <span>Master Lokasi</span></a></li>
                     <li><a href="<?= base_url('user/satuan') ?>"><i class="fa fa-map-signs"></i> <span>Master Satuan</span></a></li>
                     <li><a href="<?= base_url('user/material') ?>"><i class="fa fa-cube"></i> <span>Master Material</span></a></li>
@@ -84,6 +54,8 @@
                     <li><a href="<?= base_url('user/harga_jasa') ?>"><i class="fa fa-money"></i> <span>Harga Jasa</span></a></li>
                     <li class="header">PEKERJAAN</li>
                     <li><a href="<?= base_url('user/pekerjaan') ?>"><i class="fa fa-briefcase"></i> <span>Master Pekerjaan</span></a></li>
+                    <li class="header">SIGN OUT</li>
+                    <li><a href="<?= base_url('auth/logout') ?>"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a></li>
 
                 </ul>
             </section>

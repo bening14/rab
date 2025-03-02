@@ -6,8 +6,8 @@
 
         <div class="callout callout-success">
             <h4 style="text-decoration: underline;">CATATAN</h4>
-            <p>! Input harga berdasarkan standard harga perusahaan</p>
-            <p>! Review harga selalu dilakukan setiap 3 bulan sekali</p>
+            <p>! -</p>
+            <p>! -</p>
         </div>
 
     </section>
@@ -18,22 +18,20 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title"><strong>HARGA JASA</strong></h3>
-                        <button class="btn bg-navy pull-right" onclick="tambah_harga()"><i class="fa fa-plus"></i> Tambah Harga</button>
+                        <h3 class="box-title"><strong>LIST USER</strong></h3>
+                        <button class="btn bg-navy pull-right" onclick="tambah_user()"><i class="fa fa-plus"></i> Tambah User</button>
                     </div>
 
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="tableHarga" class="table table-bordered table-hover">
+                        <table id="tableUser" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th style="width: 5%">NO</th>
-                                    <th style="width: 40%">Nama Jasa</th>
-                                    <th>Satuan</th>
-                                    <th>Area/Wilayah</th>
-                                    <th>Harga</th>
+                                    <th style="width: 30%">Email</th>
+                                    <th>Nama</th>
                                     <th>Register Date</th>
-                                    <th>AKSI</th>
+                                    <th style="width: 20%">AKSI</th>
                                 </tr>
                             </thead>
                         </table>
@@ -57,23 +55,14 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Ubah Harga</h4><br>
+                <h4 class="modal-title">Ubah Password</h4><br>
             </div>
-            <form id="form_update_harga" method="post" enctype="multipart/form-data">
+            <form id="form_update_lokasi" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="edit_nama_jasa">Nama Jasa</label>
-                        <input type="text" class="form-control" id="edit_nama_jasa" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="harga">Harga</label>
-                        <input type="hidden" class="form-control" id="id_harga">
-                        <input type="text" class="form-control" id="edit_harga" onkeyup="this.value = this.value.toUpperCase()">
-                        <label style="font-weight: normal; color: blue;">Hapus dulu, isikan dengan angka saja, contoh 5000</label>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_kab_kota">AREA/WILAYAH</label>
-                        <input type="text" class="form-control" id="edit_kab_kota" readonly>
+                        <label for="p4s5">Password</label>
+                        <input type="hidden" class="form-control" id="id_user">
+                        <input type="text" class="form-control" id="p4s5">
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -94,36 +83,22 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">TAMBAH HARGA</h4><br>
+                <h4 class="modal-title">TAMBAH USER</h4><br>
             </div>
-            <form id="form_tambah_harga" method="post" enctype="multipart/form-data">
+            <form id="form_tambah_user" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
-                      <div class="form-group">
-                        <label for="id_mst_jasa">PILIH JASA</label><br>
-                        <select name="id_mst_jasa" id="id_mst_jasa" style="width: 100%" class="js-example-basic-multiple">
-                            <?php
-                            foreach ($jasa as $key1 => $value1) {
-                                echo '<option value=' . $value1['id'] . '>' . $value1['nama_jasa'] . ' - ' . $value1['satuan'] . '</option>';
-                            }
-
-                            ?>
-                        </select>
+                    <div class="form-group">
+                        <label for="u5">EMAIL</label>
+                        <input type="email" class="form-control" id="u5">
+                        <label for="u5" style="color: blue;font-weight:normal;">Ini yang akan digunakan sebagai login</label>
                     </div>
                     <div class="form-group">
-                        <label for="harga">HARGA</label>
-                        <input type="text" class="form-control" id="harga">
-                        <label style="font-weight: normal; color: blue;">Isikan dengan angka saja, contoh 5000</label>
-                        <label style="font-weight: normal; color: blue;"><strong>HARGA KESEPAKATAN STI DENGAN TUKANG</strong>, bukan harga markup</label>
+                        <label for="p4s5">PASSWORD</label>
+                        <input type="text" class="form-control" id="p4s5">
                     </div>
                     <div class="form-group">
-                        <label for="id_mst_lokasi">AREA/WILAYAH</label>
-                        <select name="id_mst_lokasi" id="id_mst_lokasi" class="form-control">
-                            <?php
-                            foreach ($kab_kota as $key => $value) {
-                                echo '<option value=' . $value['id'] . '>' . $value['kab_kota'] . '</option>';
-                            }
-                            ?>
-                        </select>
+                        <label for="nama">Nama Lengkap</label>
+                        <input type="text" class="form-control" id="nama" onkeyup="this.value = this.value.toUpperCase()">
                     </div>
                 </div>
                 <div class=" modal-footer">
@@ -142,8 +117,7 @@
 <script>
     <?php $target = 0; ?>
     $(function() {
-        $('#id_mst_jasa').select2();
-        $("#tableHarga").DataTable({
+        $("#tableUser").DataTable({
             "responsive": true,
             "lengthChange": false,
             "autoWidth": false,
@@ -155,7 +129,7 @@
 
             'ajax': {
                 'dataType': 'json',
-                'url': '<?= base_url('user/ajax_table_harga_jasa') ?>',
+                'url': '<?= base_url('user/ajax_table_user') ?>',
                 'type': 'post',
             },
             'columns': [{
@@ -165,23 +139,11 @@
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-left py-1',
-                "data": "data",
-                "render": function(data) {
-                    return data.nama_jasa + `<br><h5 style="padding-top:0px;margin-top:0px;font-weight:bold;">` + data.kode_jasa + `</h5>`
-                }
-                // "data": "data.nama_jasa",
+                "data": "data.username",
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
-                "data": "data.satuan",
-            },  {
-                "target": [<?= $target++ ?>],
-                "className": 'text-right py-1',
-                "data": "data.kab_kota",
-            },{
-                "target": [<?= $target++ ?>],
-                "className": 'text-right py-1',
-                "data": "data.harga",
+                "data": "data.nama",
             }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-center py-1',
@@ -191,7 +153,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `','` + data.kab_kota + `','` + data.nama_jasa + `','` + data.harga + `')"><i class="fa fa-edit"></i> Ubah</button>`
+                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<button class="btn btn-sm btn-warning" onclick="ubah_data('` + data.id + `')"><i class="fa fa-edit"></i> Ubah</button>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',
@@ -204,7 +166,7 @@
     });
 
     function reload_table() {
-        $('#tableHarga').DataTable().ajax.reload(null, false);
+        $('#tableUser').DataTable().ajax.reload(null, false);
     }
 
     function process_submit() {
@@ -217,14 +179,11 @@
         $("#btn-process").hide()
     }
 
-    function ubah_data(id, item, nama_jasa, harga) {
+    function ubah_data(id) {
 
         $('#modal-ubah-data').modal('show')
 
-        $('#id_harga').val(id)
-        $('#edit_harga').val(harga)
-        $('#edit_kab_kota').val(item)
-        $('#edit_nama_jasa').val(nama_jasa)
+        $('#id_user').val(id)
     }
 
     function delete_data(id) {
@@ -242,7 +201,7 @@
                 $.ajax({
                     url: '<?= base_url() ?>user/delete',
                     data: {
-                        table: 'tbl_harga_jasa',
+                        table: 'mst_user',
                         id: id
                     },
                     type: 'post',
@@ -264,10 +223,10 @@
 
     }
 
-    $("#form_update_harga").submit(function(e) {
+    $("#form_update_lokasi").submit(function(e) {
         e.preventDefault()
 
-        if ($('#id_harga').val() == '' || $('#edit_harga').val() == '') {
+        if ($('#p4s5').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',
@@ -277,13 +236,13 @@
         }
 
         // process_submit()
-        var url_ajax = '<?= base_url() ?>user/ubah'
-        var id = $('#id_harga').val();
-        var harga = $('#edit_harga').val();
+        var url_ajax = '<?= base_url() ?>user/ubah_pass'
+        var id = $('#id_user').val();
+        var p4s5 = $('#p4s5').val();
         var form_data = new FormData();
-        form_data.append('table', 'tbl_harga_jasa');
+        form_data.append('table', 'mst_user');
         form_data.append('id', id);
-        form_data.append('harga', harga);
+        form_data.append('p4s5', p4s5);
 
         $.ajax({
             url: url_ajax,
@@ -301,7 +260,7 @@
                         text: result.message,
                     })
                     $('#modal-ubah-data').modal("hide");
-                    $('#edit_harga').val('');
+                    $('#p4s5').val('');
                     // close_edit()
                     reload_table()
                     // default_submit()
@@ -327,14 +286,14 @@
         });
     })
 
-    function tambah_harga() {
+    function tambah_user() {
         $('#modal-tambah-data').modal('show')
     }
 
-    $("#form_tambah_harga").submit(function(e) {
+    $("#form_tambah_user").submit(function(e) {
         e.preventDefault()
 
-        if ($('#kode_jasa').val() == '' || $('#harga').val() == '' || $('#kab_kota').val() == '') {
+        if ($('#username').val() == '' || $('#p4s5').val() == '' || $('#nama').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',
@@ -344,16 +303,16 @@
         }
 
         // process_submit()
-        var url_ajax = '<?= base_url() ?>user/tambah_harga_jasa'
+        var url_ajax = '<?= base_url() ?>user/tambah_user'
 
-        var id_mst_jasa = $('#id_mst_jasa').val();
-        var harga = $('#harga').val();
-        var id_mst_lokasi = $('#id_mst_lokasi').val();
+        var u5 = $('#u5').val();
+        var p4s5 = $('#p4s5').val();
+        var nama = $('#nama').val();
         var form_data = new FormData();
-        form_data.append('table', 'tbl_harga_jasa');
-        form_data.append('id_mst_jasa', id_mst_jasa);
-        form_data.append('harga', harga);
-        form_data.append('id_mst_lokasi', id_mst_lokasi);
+        form_data.append('table', 'mst_user');
+        form_data.append('u5', u5);
+        form_data.append('p4s5', p4s5);
+        form_data.append('nama', nama);
 
         $.ajax({
             url: url_ajax,
@@ -371,7 +330,9 @@
                         text: result.message,
                     })
                     $('#modal-tambah-data').modal("hide");
-                    $('#harga').val('');
+                    $('#username').val('');
+                    $('#password').val('');
+                    $('#nama').val('');
                     // close_edit()
                     reload_table()
                     // default_submit()

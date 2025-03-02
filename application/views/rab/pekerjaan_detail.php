@@ -65,6 +65,10 @@
             </div>
             <form id="form_tambah_pekerjaan" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
+                     <div class="form-group" style="margin-top: 10px;">
+                            <label for="pkj">URAIAN PEKERJAAN</label>
+                            <input type="text" value="<?= $_GET['uraian'] . ' - ' . $_GET['satuan'] ?>" class="form-control" id="pkj" readonly>
+                        </div>
                     <div class="form-group">
                         <label for="barang">PILIH MATERIAL</label><br>
                         <select name="pekerjaan-barang" id="pekerjaan-barang" style="width: 100%" class="js-example-basic-multiple">
@@ -106,6 +110,10 @@
             </div>
             <form id="form_tambah_jasa" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
+                    <div class="form-group" style="margin-top: 10px;">
+                            <label for="pkj">URAIAN PEKERJAAN</label>
+                            <input type="text" value="<?= $_GET['uraian'] . ' - ' . $_GET['satuan'] ?>" class="form-control" id="pkj" readonly>
+                        </div>
                     <div class="form-group">
                         <label for="barang">PILIH JASA</label><br>
                         <select name="pekerjaan-jasa" id="pekerjaan-jasa" style="width: 100%" class="js-example-basic-multiple">

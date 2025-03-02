@@ -6,7 +6,7 @@
 
         <div class="callout callout-success">
             <h4 style="text-decoration: underline;">CATATAN</h4>
-            <p>! -</p>
+            <p>! Pastikan Pekerjaan yang akan menjadi bagian RAB sudah dibuat di Master Pekerjaan</p>
             <p>! -</p>
         </div>
 

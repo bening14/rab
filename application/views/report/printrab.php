@@ -19,7 +19,7 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="<?= base_url('assets/adminlte/') ?>dist/css/skins/_all-skins.min.css">
-    <link rel="shortcut icon" type="image/x-icon" href="<?= base_url('assets/logo.png') ?>">
+    <link rel="shortcut icon" type="image/x-icon" href="<?= base_url('assets/printer.png') ?>">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -146,7 +146,7 @@
                 <p><strong>Website :</strong> https://solusitukang.id</p>
                 </div>
                 <div class="col-xs-6" style="text-align: right;">
-                    <img src="<?= base_url('assets/logo_sti.png') ?>" alt="KOP" style="width: 100px;">
+                    <img src="<?= base_url('assets/logo_sti.png') ?>" alt="KOP" style="width: 125px;">
                 </div>
             </div>
 
@@ -210,7 +210,7 @@
                         <td style="font-size: 11px;text-align: center;height: 30px;"><?= $no ?></td>
                         <td style="font-size: 11px;text-align: center;"><?= $val['uraian_pekerjaan'] ?></td>
                         <td style="font-size: 11px;text-align: center;"><?= number_format($val['qty'] , 2) ?></td>
-                        <td style="font-size: 11px;text-align: center;">M2</td>
+                        <td style="font-size: 11px;text-align: center;"><?= $val['satuan'] ?></td>
                         <td style="font-size: 11px;text-align: center;"><?php
 
                                                                         $harga = ($val['harga_final'] / $val['qty']);
@@ -240,21 +240,15 @@
 
                     <div class='row pull-right'>
                         <div class="col-xs-12">
-                            <table border="1" style="width: 100%;" class="text-center">
+                            <table style="width: 100%;border-style: hidden;" class="text-center">
                                 <tr>
-                                    <td style="width: 33%;">APPROVED</td>
-                                    <td style="width: 33%;">CHECKED</td>
-                                    <td style="width: 33%;">PREPARED</td>
+                                    <td style="width: 50%;border-style: hidden;">PT. Solusi Tukang Indonesia</td>
                                 </tr>
-                                <tr style="height: 50px;">
-                                    <td style="width: 100px;"></td>
-                                    <td></td>
-                                    <td></td>
+                                <tr style="height: 70px;">
+                                    <td style="width: 100px;border-style: hidden;"></td>
                                 </tr>
                                 <tr>
-                                    <td style="border-bottom: solid black 1pt;">DIR/MGR</td>
-                                    <td style="border-bottom: solid black 1pt;">SPV</td>
-                                    <td style="border-bottom: solid black 1pt;">FRM</td>
+                                    <td style="border-bottom: solid black 1pt;"><u>Syauqi El Rahman</u><br>Manager OPS</td>
                             </table>
                         </div>
                     </div>

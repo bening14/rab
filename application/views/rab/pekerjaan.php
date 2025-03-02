@@ -32,6 +32,7 @@
                                     <th>Satuan</th>
                                     <th>Area/Wilayah</th>
                                     <th>Harga Origin</th>
+                                    <th style="background-color: aqua;">Harga UP 30% (CSO)</th>
                                     <th>Register Date</th>
                                     <th style="width: 15%">AKSI</th>
                                 </tr>
@@ -61,6 +62,17 @@
             <form id="form_tambah_pekerjaan" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="form-group">
+                        <label for="kab_kota">AREA/WILAYAH</label>
+                        <select name="kab_kota" id="kab_kota" class="form-control">
+                            <?php
+                            foreach ($kab_kota as $key => $value) {
+                                echo '<option value=' . $value["id"] . '>' . $value["kab_kota"] . '</option>';
+                            }
+
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="uraian_pekerjaan">URAIAN PEKERJAAN</label>
                         <input type="text" class="form-control" id="uraian_pekerjaan">
                         <!-- <label style="font-weight: normal; color: blue;">Isi detail pekerjaan yang jelas beserta satuannya, misal : Plester Dinding 1 M3</label> -->
@@ -74,17 +86,6 @@
                                 <option value="<?= $val['satuan'] ?>"><?= $val['satuan'] ?></option>
                             <?php
                             }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="kab_kota">AREA/WILAYAH</label>
-                        <select name="kab_kota" id="kab_kota" class="form-control">
-                            <?php
-                            foreach ($kab_kota as $key => $value) {
-                                echo '<option value=' . $value["id"] . '>' . $value["kab_kota"] . '</option>';
-                            }
-
                             ?>
                         </select>
                     </div>
@@ -145,6 +146,10 @@
                 "data": "data.harga_origin",
             }, {
                 "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
+                "data": "data.harga_up_30",
+            }, {
+                "target": [<?= $target++ ?>],
                 "className": 'text-center py-1',
                 "data": "data.date_created",
             }, {
@@ -152,7 +157,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<a href="<?= base_url('user/pekerjaan_detail?kode_pekerjaan=') ?>${data.kode_pekerjaan}&kota=${data.kab_kota}&uraian=${data.uraian_pekerjaan}" type="button" class="btn btn-info btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
+                    return `<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<a href="<?= base_url('user/pekerjaan_detail?kode_pekerjaan=') ?>${data.kode_pekerjaan}&kota=${data.kab_kota}&uraian=${data.uraian_pekerjaan}&satuan=${data.satuan}" type="button" class="btn btn-info btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',

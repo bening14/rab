@@ -36,6 +36,7 @@
                                 <tr>
                                     <th style="width: 5%">NO</th>
                                     <th style="width: 15%">Pekerjaan</th>
+                                    <th>Satuan</th>
                                     <th>Nilai Origin</th>
                                     <th>QTY</th>
                                     <th>Nilai Konversi</th>
@@ -76,7 +77,7 @@
                         <select name="pekerjaan-barang" id="pekerjaan-barang" style="width: 100%" class="js-example-basic-multiple">
                             <?php
                             foreach ($detail_pekerjaan as $key => $val) {
-                                echo '<option value=' . $val["kode_pekerjaan"] . '>' . $val["uraian_pekerjaan"] . '</option>';
+                                echo '<option value=' . $val["kode_pekerjaan"] . '>' . $val["uraian_pekerjaan"] . ' - ' . $val["satuan"] . '</option>';
                             }
 
                             ?>
@@ -85,19 +86,19 @@
                         </select>
                         </div>
                         <div class="form-group" style="margin-top: 10px;">
-                            <label for="harga">QTY</label>
+                            <label for="harga">QTY PEKERJAAN</label>
                             <input type="text" class="form-control" id="qty">
-                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, ini merupakah Pekerjaan yang dilaksanakan</label>
+                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, ini merupakah Jumlah Pekerjaan yang dilaksanakan</label>
                         </div>
                         <div class="form-group">
                             <label for="margin_persen">Margin (Persen)</label>
                             <input type="text" class="form-control" id="margin_persen">
-                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, ini merupakah persentase keuntungan yang diinginkan</label>
+                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, ini merupakah persentase keuntungan yang diinginkan. CTH: 30</label>
                         </div>
                         <div class="form-group">
                             <label for="resiko_persen">Faktor Resiko (Persen)</label>
                             <input type="text" class="form-control" id="resiko_persen">
-                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, tidak semua pekerjaan harus memiliki cost faktor resiko</label>
+                            <label style="font-weight: normal; color: blue;">Jika koma maka gunakan titik, tidak semua pekerjaan harus memiliki cost faktor resiko = 0</label>
                         </div>
                     
                 </div>
@@ -148,6 +149,10 @@
                     return data.uraian_pekerjaan + `<br><h5 style="padding-top:0px;margin-top:0px;font-weight:bold;">` + data.kode_pekerjaan + `</h5>`
                 }
             }, {
+                "target": [<?= $target++ ?>],
+                "className": 'text-right py-1',
+                "data": "data.satuan",
+            },{
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
                 "data": "data.harga_final",
