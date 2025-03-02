@@ -263,7 +263,7 @@
     $("#form_tambah_pekerjaan").submit(function(e) {
         e.preventDefault()
 
-        if ($('#qty').val() == '') {
+        if ($('#qty').val() == '' || $('#margin_persen').val() == '' || $('#resiko_persen').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',

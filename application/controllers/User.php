@@ -391,22 +391,29 @@ class User extends CI_Controller
         $whereBrg = array(
             'id' => $id_mst_barang
         );
-        $getBrg = $this->crud->get_where('mst_barang', $whereBrg)->row_array();
+        $getBrg = $this->crud->get_where('mst_barang', $whereBrg)->result_array();
+        foreach ($getBrg as $key => $value) {
+            $kode_barang = $value['kode_barang'];
+            $nama_barang = $value['nama_barang'];
+            $satuan = $value['satuan'];
+        }
        
         $whereLokasi = array(
             'id' => $id_mst_lokasi
         );
-        $getLokasi = $this->crud->get_where('mst_lokasi', $whereLokasi)->row_array();
-        // $getLokasi['kab_kota'];
+        $getLokasi = $this->crud->get_where('mst_lokasi', $whereLokasi)->result_array();
+        foreach ($getLokasi as $key1 => $val) {
+           $kab_kota = $val['kab_kota'];
+        }
 
         $data = array(
             'id_mst_barang' => $id_mst_barang,
-            'kode_barang' => $getBrg['kode_barang'],
-            'nama_barang' => $getBrg['nama_barang'],
-            'satuan' => $getBrg['satuan'],
+            'kode_barang' => $kode_barang,
+            'nama_barang' => $nama_barang,
+            'satuan' => $satuan,
             'harga' => $harga,
             'id_mst_lokasi' => $id_mst_lokasi,
-            'kab_kota' => $getLokasi['kab_kota']
+            'kab_kota' => $kab_kota
         );
 
         $insert = $this->crud->insert($table, $data);
@@ -441,21 +448,28 @@ class User extends CI_Controller
         $whereJs = array(
             'id' => $id_mst_jasa
         );
-        $getJs = $this->crud->get_where('mst_jasa', $whereJs)->row_array();
+        $getJs = $this->crud->get_where('mst_jasa', $whereJs)->result_array();
+        foreach ($getJs as $key => $value) {
+            $kode_jasa = $value['kode_jasa'];
+            $nama_jasa = $value['nama_jasa'];
+            $satuan = $value['satuan'];
+        }
         $whereLokasi = array(
             'id' => $id_mst_lokasi
         );
-        $getLokasi = $this->crud->get_where('mst_lokasi', $whereLokasi)->row_array();
-        $getLokasi['kab_kota'];
+        $getLokasi = $this->crud->get_where('mst_lokasi', $whereLokasi)->result_array();
+        foreach ($getLokasi as $key1 => $val) {
+            $kab_kota = $val['kab_kota'];
+        }
 
         $data = array(
             'id_mst_jasa' => $id_mst_jasa,
-            'kode_jasa' => $getJs['kode_jasa'],
-            'nama_jasa' => $getJs['nama_jasa'],
-            'satuan' => $getJs['satuan'],
+            'kode_jasa' => $kode_jasa,
+            'nama_jasa' => $nama_jasa,
+            'satuan' => $satuan,
             'harga' => $harga,
             'id_mst_lokasi' => $id_mst_lokasi,
-            'kab_kota' => $getLokasi['kab_kota']
+            'kab_kota' => $kab_kota
         );
 
         $insert = $this->crud->insert($table, $data);
@@ -798,16 +812,20 @@ class User extends CI_Controller
         $wherePkj = array(
             'kode_pekerjaan' => $kode_pekerjaan
         );
-        $getPkj = $this->crud->get_where('tbl_pekerjaan_header', $wherePkj)->row_array();
-        $idPkj = $getPkj['id'];
-        $uraian = $getPkj['uraian_pekerjaan'];
+        $getPkj = $this->crud->get_where('tbl_pekerjaan_header', $wherePkj)->result_array();
+        foreach ($getPkj as $key => $value) {
+            $idPkj = $value['id'];
+            $uraian = $value['uraian_pekerjaan'];
+        }
         $whereBrg = array(
             'kode_barang' => $kode_barang,
             'kab_kota' => $kab_kota
         );
-        $getBrg = $this->crud->get_where('tbl_harga_material', $whereBrg)->row_array();
-        $nama_barang = $getBrg['nama_barang'];
-        $harga = $getBrg['harga'];
+        $getBrg = $this->crud->get_where('tbl_harga_material', $whereBrg)->result_array();
+        foreach ($getBrg as $key1 => $val) {
+            $nama_barang = $val['nama_barang'];
+            $harga = $val['harga'];
+        }
 
         $data = array(
             'id_tbl_pekerjaan_header' => $idPkj,
@@ -852,16 +870,20 @@ class User extends CI_Controller
         $wherePkj = array(
             'kode_pekerjaan' => $kode_pekerjaan
         );
-        $getPkj = $this->crud->get_where('tbl_pekerjaan_header', $wherePkj)->row_array();
-        $idPkj = $getPkj['id'];
-        $uraian = $getPkj['uraian_pekerjaan'];
+        $getPkj = $this->crud->get_where('tbl_pekerjaan_header', $wherePkj)->result_array();
+        foreach ($getPkj as $key => $value) {
+            $idPkj = $value['id'];
+            $uraian = $value['uraian_pekerjaan'];
+        }
         $whereBrg = array(
             'kode_jasa' => $kode_barang,
             'kab_kota' => $kab_kota
         );
-        $getBrg = $this->crud->get_where('tbl_harga_jasa', $whereBrg)->row_array();
-        $nama_barang = $getBrg['nama_jasa'];
-        $harga = $getBrg['harga'];
+        $getBrg = $this->crud->get_where('tbl_harga_jasa', $whereBrg)->result_array();
+        foreach ($getBrg as $key1 => $val) {
+            $nama_barang = $val['nama_jasa'];
+            $harga = $val['harga'];
+        }
 
         $data = array(
             'id_tbl_pekerjaan_header' => $idPkj,
@@ -913,7 +935,11 @@ class User extends CI_Controller
             'kode_pekerjaan' => $kode_pekerjaan
         );
         $a = $this->crud->sum_where('tbl_pekerjaan_detail', $whereOrg, 'harga_konversi')->row_array();
-        $b = $a['harga_konversi'];
+        if(isset($a['harga_konversi'])){
+            $b = $a['harga_konversi'];
+        }else{
+            $b = 0;
+        }
         $dataOrg = array(
             'harga_origin' => $b
         );
@@ -1066,8 +1092,8 @@ class User extends CI_Controller
         );
 
         $insert = $this->crud->insert($table, $data);
-        // echo $this->db->last_query();
-        // die;
+        echo $this->db->last_query();
+        die;
 
 
         if ($this->db->affected_rows() == TRUE) {
@@ -1085,26 +1111,34 @@ class User extends CI_Controller
         $qty = $this->input->post("qty");
         $kode_pekerjaan = $this->input->post("kode_pekerjaan");
         $so_number = $this->input->post("so_number");
-        $margin_persen = ($this->input->post("margin_persen")/100);
-        $resiko_persen = ($this->input->post("resiko_persen")/100);
+        $a = $this->input->post("margin_persen");
+        $b = $this->input->post("resiko_persen");
+        $c = floatval($a);
+        $d = floatval($b);
+
+        $margin_persen = $c/100;
+        $resiko_persen = $d/100;
 
         $wherePkj = array(
             'so_number' => $so_number
         );
-        $getPkj = $this->crud->get_where('tbl_rab_header', $wherePkj)->row_array();
-        $idPkj = $getPkj['id'];
-        $customer = $getPkj['customer'];
+        $getPkj = $this->crud->get_where('tbl_rab_header', $wherePkj)->result_array();
+        foreach ($getPkj as $key => $value) {
+            $idPkj = $value['id'];
+            $customer = $value['customer'];
+        }
 
         $whereBrg = array(
             'kode_pekerjaan' => $kode_pekerjaan,
             'kab_kota' => $kab_kota
         );
-        $getBrg = $this->crud->get_where('tbl_pekerjaan_header', $whereBrg)->row_array();
-        // echo $this->db->last_query();
-        // die;
-        $uraian = $getBrg['uraian_pekerjaan'];
-        $harga_origin = $getBrg['harga_origin'];
-        $harga_konversi = $getBrg['harga_origin'] * $qty;
+        $getBrg = $this->crud->get_where('tbl_pekerjaan_header', $whereBrg)->result_array();
+        foreach ($getBrg as $key1 => $val) {
+            $uraian = $val['uraian_pekerjaan'];
+            $harga_origin = $val['harga_origin'];
+            $harga_konversi = $val['harga_origin'] * $qty;
+        }
+        
         $margin_amount = $margin_persen * $harga_konversi;
         $resiko_amount = $resiko_persen * $harga_konversi;
         $harga_final = $harga_konversi + $margin_amount + $resiko_amount;
@@ -1142,8 +1176,9 @@ class User extends CI_Controller
             'profit' => $profit
         );
   
-
         $this->crud->insert($table, $data);
+
+       
 
 
         //update tbl_rab_header (nilai_origin, nilai_final, profit)
@@ -1193,13 +1228,26 @@ class User extends CI_Controller
             'so_number' => $so_number
         );
         $a = $this->crud->sum_where('tbl_rab_detail', $whereOrg, 'harga_konversi')->row_array();
-        $b = $a['harga_konversi'];
+        if(isset($a['harga_konversi'])){
+            $b = $a['harga_konversi'];
+        }else{
+            $b=0;
+        }
+
 
         $c = $this->crud->sum_where('tbl_rab_detail', $whereOrg, 'harga_final')->row_array();
-        $d = $c['harga_final'];
+        if(isset($c['harga_final'])){
+            $d = $c['harga_final'];
+        }else{
+            $d = 0;
+        }
 
         $e = $this->crud->sum_where('tbl_rab_detail', $whereOrg, 'profit')->row_array();
-        $f = $e['profit'];
+        if(isset($e['profit'])){
+            $f = $e['profit'];
+        }else{
+            $f = 0;
+        }
 
         $dataOrg = array(
             'nilai_origin' => $b,
