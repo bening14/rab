@@ -169,9 +169,9 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-3">
-                            <p>Nama Bahan</p>
-                            <p>Jumlah</p>
-                            <p>Harga</p>
+                            <p>Nama Customer</p>
+                            <p>Alamat</p>
+                            <p>SO Number</p>
                             <p>Kegiatan Pekerjaan</p>
                             <p>Luas Area</p>
                         </div>
@@ -196,37 +196,26 @@
                     <table border="1" style="width: 100%">
                         <tr>
                             <th style="font-size: 11px;text-align: center;height: 40px;">NO</th>
-                            <th style="font-size: 11px;text-align: center;">Uraian Pekerjaan</th>
-                            <th style="font-size: 11px;text-align: center;">Banyaknya<br>(Vol. Pekerjaan)</th>
-                            <th style="font-size: 11px;text-align: center;">Satuan</th>
-                            <th style="font-size: 11px;text-align: center;">Analisa Harga Satuan</th>
+                            <th style="font-size: 11px;text-align: center;">Nama Material</th>
+                            <th style="font-size: 11px;text-align: center;">Harga Satuan</th>
                             <th style="font-size: 11px;text-align: center;">Jumlah</th>
+                            <th style="font-size: 11px;text-align: center;">Harga Konversi</th>
                         </tr>
                         <?php
                         $no = 1;
-                        foreach ($detail as $key => $val) {
+                        foreach ($rm as $key => $val) {
                         ?>
                             <tr>
                                 <td style="font-size: 11px;text-align: center;height: 30px;"><?= $no ?></td>
-                                <td style="font-size: 11px;text-align: center;"><?= $val['uraian_pekerjaan'] ?></td>
+                                <td style="font-size: 11px;text-align: center;"><?= $val['nama_barang'] ?></td>
+                                <td style="font-size: 11px;text-align: center;"><?= 'Rp.' . number_format($val['harga_bahan'], 2) ?></td>
                                 <td style="font-size: 11px;text-align: center;"><?= number_format($val['qty'], 2) ?></td>
-                                <td style="font-size: 11px;text-align: center;"><?= $val['satuan'] ?></td>
-                                <td style="font-size: 11px;text-align: center;"><?php
-
-                                                                                $harga = ($val['harga_final'] / $val['qty']);
-                                                                                echo 'Rp. ' . number_format($harga, 2);
-
-                                                                                ?></td>
-                                <td style="font-size: 11px;text-align: center;"><?= 'Rp. ' . number_format($val['harga_final'], 2) ?></td>
+                                <td style="font-size: 11px;text-align: center;"><?= 'Rp. ' . number_format($val['harga_konversi'], 2) ?></td>
                             </tr>
                         <?php
                             $no++;
                         }
                         ?>
-                        <tr>
-                            <td colspan="5" style="text-align: center;font-weight: bold;height: 30px;">TOTAL</td>
-                            <td style="text-align: center;font-weight: bold;height: 30px;"><?= 'Rp. ' . number_format($header['nilai_final'], 2) ?></td>
-                        </tr>
                     </table>
 
                 </div>

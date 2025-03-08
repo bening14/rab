@@ -1400,8 +1400,8 @@ class User extends CI_Controller
             'so_number' => $so_number
         );
 
+        $data['rm'] = $this->crud->get_where('tbl_rab_material', $where)->result_array();
         $data['header'] = $this->crud->get_where('tbl_rab_header', $where)->row_array();
-        $data['detail'] = $this->crud->get_where('tbl_rab_detail', $where)->result_array();
 
         $this->load->view('report/printrm', $data);
     }
