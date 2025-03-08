@@ -154,7 +154,7 @@
             </form>
         </div>
 
-</div>
+    </div>
 
 </div>
 
@@ -204,7 +204,7 @@
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
                 "data": "data.profit",
-            },  {
+            }, {
                 "target": [<?= $target++ ?>],
                 "className": 'text-right py-1',
                 "data": "data.kab_kota",
@@ -217,7 +217,7 @@
                 "className": 'text-left py-1',
                 "data": "data",
                 "render": function(data) {
-                    return `<a href="<?= base_url('user/print_rab?so_number=') ?>${data.so_number}" target="_blank" type="button" class="btn btn-default btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Cetak"><i class="fa fa-print"></i> Cetak</a>&nbsp;<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<a href="<?= base_url('user/rab_detail?so_number=') ?>${data.so_number}&customer=${data.customer}&kota=${data.kab_kota}&alamat=${data.alamat}&hp=${data.hp}" type="button" class="btn btn-primary btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
+                    return `<a href="<?= base_url('user/print_rab?so_number=') ?>${data.so_number}" target="_blank" type="button" class="btn btn-default btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="RAB"><i class="fa fa-print"></i> RAB</a>&nbsp;<a href="<?= base_url('user/print_rm?so_number=') ?>${data.so_number}" target="_blank" type="button" class="btn btn-default btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="MATERIAL"><i class="fa fa-cart-plus"></i> MATERIAL</a>&nbsp;<button class="btn btn-sm btn-danger" onclick="delete_data('` + data.id + `')"><i class="fa fa-trash"></i> Hapus</button>&nbsp;<a href="<?= base_url('user/rab_detail?so_number=') ?>${data.so_number}&customer=${data.customer}&kota=${data.kab_kota}&alamat=${data.alamat}&hp=${data.hp}" type="button" class="btn btn-primary btn-sm waves-effect waves-float waves-light ms-3px" data-bs-toggle="tooltip" data-bs-placement="top" title="Detail"><i class="fa fa-info-circle"></i> Detail</a>`
                 }
             }, ],
             "dom": '<"row px-2" <"col-md-6 pt-1" <"toolbar">><"col-md-6" f>>rt<"row px-2" <"col-md-6" i><"col-md-6" p>>',
@@ -366,7 +366,7 @@
     $("#form_tambah_rab").submit(function(e) {
         e.preventDefault()
 
-        if ($('#so_number').val() == '' || $('#kegiatan_pekerjaan').val() == ''|| $('#luas_area').val() == ''|| $('#customer').val() == '' || $('#alamat').val() == '' || $('#hp').val() == '' || $('#kab_kota').val() == '') {
+        if ($('#so_number').val() == '' || $('#kegiatan_pekerjaan').val() == '' || $('#luas_area').val() == '' || $('#customer').val() == '' || $('#alamat').val() == '' || $('#hp').val() == '' || $('#kab_kota').val() == '') {
             Swal.fire(
                 'error!',
                 'tidak boleh ada kolom kosong!',

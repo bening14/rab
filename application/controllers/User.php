@@ -25,7 +25,7 @@ class User extends CI_Controller
     public function index()
     {
         $data['title'] = 'Dashboard | Hitung RAB';
-         $data['kab_kota'] = $this->crud->get_all('mst_lokasi')->result_array();
+        $data['kab_kota'] = $this->crud->get_all('mst_lokasi')->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -43,7 +43,7 @@ class User extends CI_Controller
         $this->load->view('template/footer');
     }
 
-      public function user()
+    public function user()
     {
         $data['title'] = 'User | Hitung RAB';
 
@@ -77,7 +77,7 @@ class User extends CI_Controller
     public function jasa()
     {
         $data['title'] = 'Jasa | Hitung RAB';
-         $data['satuan'] = $this->crud->get_all('mst_satuan')->result_array();
+        $data['satuan'] = $this->crud->get_all('mst_satuan')->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -161,33 +161,33 @@ class User extends CI_Controller
         $this->load->view('template/footer');
     }
 
-     public function rab_detail()
+    public function rab_detail()
     {
         $data['title'] = 'Detail | Hitung RAB';
         $so_number = $_GET['so_number'];
         $kab_kota = $_GET['kota'];
 
-       
+
         $customer = $_GET['customer'];
-         if (isset($customer)) {
+        if (isset($customer)) {
             $data['customer'] = $customer;
         } else {
             $data['customer'] = 'Belum Klasifikasi';
         }
         $kota = $_GET['kota'];
-         if (isset($kota)) {
+        if (isset($kota)) {
             $data['kota'] = $kota;
         } else {
             $data['kota'] = 'Belum Klasifikasi';
         }
         $alamat = $_GET['alamat'];
-         if (isset($alamat)) {
+        if (isset($alamat)) {
             $data['alamat'] = $alamat;
         } else {
             $data['alamat'] = 'Belum Klasifikasi';
         }
         $hp = $_GET['hp'];
-         if (isset($hp)) {
+        if (isset($hp)) {
             $data['hp'] = $hp;
         } else {
             $data['hp'] = 'Belum Klasifikasi';
@@ -201,7 +201,7 @@ class User extends CI_Controller
         } else {
             $data['harga_total'] = 'Rp. 0';
         }
-    
+
 
         $whereBrg = array(
             'kab_kota' => $kota
@@ -333,14 +333,14 @@ class User extends CI_Controller
         echo json_encode($response);
     }
 
-     public function ubah_pass()
+    public function ubah_pass()
     {
-       $table = $this->input->post("table");
-       $id = $this->input->post("id");
+        $table = $this->input->post("table");
+        $id = $this->input->post("id");
         $p4s5 = $this->input->post("p4s5");
         $p = password_hash($p4s5, PASSWORD_DEFAULT);
 
-         $data = array(
+        $data = array(
             'password' => $p
         );
 
@@ -373,7 +373,7 @@ class User extends CI_Controller
         echo json_encode($response);
     }
 
-     public function tambah_user()
+    public function tambah_user()
     {
         $table = $this->input->post("table");
         $u5 = $this->input->post("u5");
@@ -494,13 +494,13 @@ class User extends CI_Controller
             $nama_barang = $value['nama_barang'];
             $satuan = $value['satuan'];
         }
-       
+
         $whereLokasi = array(
             'id' => $id_mst_lokasi
         );
         $getLokasi = $this->crud->get_where('mst_lokasi', $whereLokasi)->result_array();
         foreach ($getLokasi as $key1 => $val) {
-           $kab_kota = $val['kab_kota'];
+            $kab_kota = $val['kab_kota'];
         }
 
         $data = array(
@@ -817,8 +817,8 @@ class User extends CI_Controller
 
         $where = null;
 
-        $column_order = array('id', 'kode_pekerjaan', 'uraian_pekerjaan', 'satuan','kab_kota', 'harga_origin', 'harga_up_30', 'date_created'); //field yang ada di table 
-        $column_search = array('id', 'kode_pekerjaan', 'uraian_pekerjaan',  'satuan','kab_kota', 'harga_origin', 'harga_up_30', 'date_created'); //field yang diizin untuk pencarian 
+        $column_order = array('id', 'kode_pekerjaan', 'uraian_pekerjaan', 'satuan', 'kab_kota', 'harga_origin', 'harga_up_30', 'date_created'); //field yang ada di table 
+        $column_search = array('id', 'kode_pekerjaan', 'uraian_pekerjaan',  'satuan', 'kab_kota', 'harga_origin', 'harga_up_30', 'date_created'); //field yang diizin untuk pencarian 
         $select = 'id, kode_pekerjaan, uraian_pekerjaan,  satuan, kab_kota, harga_origin, harga_up_30, date_created';
         $group = 'id, kode_pekerjaan, uraian_pekerjaan,  satuan, kab_kota, harga_origin, harga_up_30, date_created';
         $order = array('id' => 'desc'); // default order 
@@ -1006,7 +1006,7 @@ class User extends CI_Controller
         );
         $a = $this->crud->sum_where('tbl_pekerjaan_detail', $whereOrg, 'harga_konversi')->row_array();
         $b = $a['harga_konversi'];
-         $c = floatval($b);
+        $c = floatval($b);
         $d = $c * 0.3;
         $e = $c + $d;
         $dataOrg = array(
@@ -1041,12 +1041,12 @@ class User extends CI_Controller
             'kode_pekerjaan' => $kode_pekerjaan
         );
         $a = $this->crud->sum_where('tbl_pekerjaan_detail', $whereOrg, 'harga_konversi')->row_array();
-        if(isset($a['harga_konversi'])){
+        if (isset($a['harga_konversi'])) {
             $b = $a['harga_konversi'];
             $c = floatval($b);
             $d = $c * 0.3;
             $e = $c + $d;
-        }else{
+        } else {
             $b = 0;
             $e = 0;
         }
@@ -1119,8 +1119,8 @@ class User extends CI_Controller
             'so_number' => $so_number
         );
 
-        $column_order = array('id', 'id_tbl_rab_header', 'so_number', 'customer', 'kode_pekerjaan', 'uraian_pekerjaan', 'satuan','harga_origin', 'qty', 'harga_konversi', 'margin_persen', 'margin_amount', 'resiko_persen', 'resiko_amount','harga_final','profit','date_created'); //field yang ada di table 
-        $column_search = array('id', 'id_tbl_rab_header', 'so_number', 'customer',  'kode_pekerjaan', 'uraian_pekerjaan', 'satuan','harga_origin', 'qty', 'harga_konversi', 'margin_persen', 'margin_amount', 'resiko_persen', 'resiko_amount','harga_final','profit','date_created'); //field yang diizin untuk pencarian 
+        $column_order = array('id', 'id_tbl_rab_header', 'so_number', 'customer', 'kode_pekerjaan', 'uraian_pekerjaan', 'satuan', 'harga_origin', 'qty', 'harga_konversi', 'margin_persen', 'margin_amount', 'resiko_persen', 'resiko_amount', 'harga_final', 'profit', 'date_created'); //field yang ada di table 
+        $column_search = array('id', 'id_tbl_rab_header', 'so_number', 'customer',  'kode_pekerjaan', 'uraian_pekerjaan', 'satuan', 'harga_origin', 'qty', 'harga_konversi', 'margin_persen', 'margin_amount', 'resiko_persen', 'resiko_amount', 'harga_final', 'profit', 'date_created'); //field yang diizin untuk pencarian 
         $select = 'id, id_tbl_rab_header, so_number, customer,  kode_pekerjaan, uraian_pekerjaan, satuan, harga_origin, qty, harga_konversi, margin_persen, margin_amount, resiko_persen, resiko_amount, harga_final, profit, date_created';
         $group = 'id, id_tbl_rab_header, so_number, customer,  kode_pekerjaan, uraian_pekerjaan, satuan, harga_origin, qty, harga_konversi, margin_persen, margin_amount, resiko_persen, resiko_amount, harga_final, profit, date_created';
         $order = array('id' => 'desc'); // default order 
@@ -1139,11 +1139,11 @@ class User extends CI_Controller
             $row['data']['uraian_pekerjaan'] =  trim($key->uraian_pekerjaan);
             $row['data']['satuan'] =  trim($key->satuan);
             $row['data']['harga_origin'] = 'Rp. ' . number_format(trim($key->harga_origin), 2);
-            $row['data']['qty'] = number_format(trim($key->qty),2);
+            $row['data']['qty'] = number_format(trim($key->qty), 2);
             $row['data']['harga_konversi'] = 'Rp. ' . number_format(trim($key->harga_konversi), 2);
-            $row['data']['margin_persen'] = number_format(trim($key->margin_persen),2);
+            $row['data']['margin_persen'] = number_format(trim($key->margin_persen), 2);
             $row['data']['margin_amount'] = 'Rp. ' . number_format(trim($key->margin_amount), 2);
-            $row['data']['resiko_persen'] =  number_format(trim($key->resiko_persen),2);
+            $row['data']['resiko_persen'] =  number_format(trim($key->resiko_persen), 2);
             $row['data']['resiko_amount'] =  'Rp. ' . number_format(trim($key->resiko_amount), 2);
             $row['data']['harga_final'] =  'Rp. ' . number_format(trim($key->harga_final), 2);
             $row['data']['profit'] =  'Rp. ' . number_format(trim($key->profit), 2);
@@ -1189,11 +1189,11 @@ class User extends CI_Controller
         $where = array(
             'id' => $this->input->post('id_mst_lokasi')
         );
-        $getLok = $this->crud->get_where('mst_lokasi',$where)->row_array();
-       
+        $getLok = $this->crud->get_where('mst_lokasi', $where)->row_array();
+
         $kab_kota = $getLok['kab_kota'];
 
-        $data = Array(
+        $data = array(
             'so_number' => $so_number,
             'kegiatan_pekerjaan' => $kegiatan_pekerjaan,
             'luas_area' => $luas_area,
@@ -1228,8 +1228,8 @@ class User extends CI_Controller
         $c = floatval($a);
         $d = floatval($b);
 
-        $margin_persen = $c/100;
-        $resiko_persen = $d/100;
+        $margin_persen = $c / 100;
+        $resiko_persen = $d / 100;
 
         $wherePkj = array(
             'so_number' => $so_number
@@ -1251,7 +1251,7 @@ class User extends CI_Controller
             $harga_origin = $val['harga_origin'];
             $harga_konversi = $val['harga_origin'] * $qty;
         }
-        
+
         $margin_amount = $margin_persen * $harga_konversi;
         $resiko_amount = $resiko_persen * $harga_konversi;
         $harga_final = $harga_konversi + $margin_amount + $resiko_amount;
@@ -1289,10 +1289,10 @@ class User extends CI_Controller
             'harga_final' => $harga_final,
             'profit' => $profit
         );
-  
+
         $this->crud->insert($table, $data);
 
-       
+
 
 
         //update tbl_rab_header (nilai_origin, nilai_final, profit)
@@ -1337,29 +1337,29 @@ class User extends CI_Controller
         //hapus data
         $hapus_data = $this->crud->delete($table, $where);
 
-         //update tbl_rab_header (nilai_origin, nilai_final, profit)
+        //update tbl_rab_header (nilai_origin, nilai_final, profit)
         $whereOrg = array(
             'so_number' => $so_number
         );
         $a = $this->crud->sum_where('tbl_rab_detail', $whereOrg, 'harga_konversi')->row_array();
-        if(isset($a['harga_konversi'])){
+        if (isset($a['harga_konversi'])) {
             $b = $a['harga_konversi'];
-        }else{
-            $b=0;
+        } else {
+            $b = 0;
         }
 
 
         $c = $this->crud->sum_where('tbl_rab_detail', $whereOrg, 'harga_final')->row_array();
-        if(isset($c['harga_final'])){
+        if (isset($c['harga_final'])) {
             $d = $c['harga_final'];
-        }else{
+        } else {
             $d = 0;
         }
 
         $e = $this->crud->sum_where('tbl_rab_detail', $whereOrg, 'profit')->row_array();
-        if(isset($e['profit'])){
+        if (isset($e['profit'])) {
             $f = $e['profit'];
-        }else{
+        } else {
             $f = 0;
         }
 
@@ -1393,4 +1393,16 @@ class User extends CI_Controller
         $this->load->view('report/printrab', $data);
     }
 
+    public function print_rm()
+    {
+        $so_number = $_GET['so_number'];
+        $where = array(
+            'so_number' => $so_number
+        );
+
+        $data['header'] = $this->crud->get_where('tbl_rab_header', $where)->row_array();
+        $data['detail'] = $this->crud->get_where('tbl_rab_detail', $where)->result_array();
+
+        $this->load->view('report/printrm', $data);
+    }
 }
